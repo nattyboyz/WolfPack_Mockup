@@ -1,0 +1,160 @@
+
+WAR GAME DESIGN Character R.png
+size: 1573,407
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Coin
+  rotate: true
+  xy: 443, 5
+  size: 50, 49
+  orig: 50, 49
+  offset: 0, 0
+  index: -1
+Head
+  rotate: false
+  xy: 916, 122
+  size: 282, 283
+  orig: 282, 283
+  offset: 0, 0
+  index: -1
+L_foot
+  rotate: false
+  xy: 919, 2
+  size: 110, 118
+  orig: 110, 118
+  offset: 0, 0
+  index: -1
+L_leg
+  rotate: true
+  xy: 539, 8
+  size: 47, 234
+  orig: 47, 234
+  offset: 0, 0
+  index: -1
+Pupil
+  rotate: true
+  xy: 850, 22
+  size: 68, 67
+  orig: 68, 67
+  offset: 0, 0
+  index: -1
+R_foot
+  rotate: false
+  xy: 1031, 2
+  size: 110, 118
+  orig: 110, 118
+  offset: 0, 0
+  index: -1
+R_leg
+  rotate: false
+  xy: 1482, 171
+  size: 47, 234
+  orig: 47, 234
+  offset: 0, 0
+  index: -1
+White eye
+  rotate: true
+  xy: 1143, 26
+  size: 94, 122
+  orig: 94, 122
+  offset: 0, 0
+  index: -1
+arm
+  rotate: false
+  xy: 1358, 167
+  size: 122, 238
+  orig: 122, 238
+  offset: 0, 0
+  index: -1
+arm 2
+  rotate: false
+  xy: 1358, 167
+  size: 122, 238
+  orig: 122, 238
+  offset: 0, 0
+  index: -1
+bait
+  rotate: true
+  xy: 1531, 204
+  size: 201, 40
+  orig: 201, 40
+  offset: 0, 0
+  index: -1
+bait head
+  rotate: true
+  xy: 397, 3
+  size: 52, 44
+  orig: 52, 44
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 186, 27
+  size: 209, 378
+  orig: 209, 378
+  offset: 0, 0
+  index: -1
+coat
+  rotate: false
+  xy: 397, 57
+  size: 307, 348
+  orig: 307, 348
+  offset: 0, 0
+  index: -1
+ear
+  rotate: false
+  xy: 1200, 158
+  size: 156, 247
+  orig: 156, 247
+  offset: 0, 0
+  index: -1
+ear 2
+  rotate: true
+  xy: 1267, 14
+  size: 142, 225
+  orig: 142, 225
+  offset: 0, 0
+  index: -1
+hand 2
+  rotate: false
+  xy: 775, 12
+  size: 73, 78
+  orig: 73, 78
+  offset: 0, 0
+  index: -1
+hand
+  rotate: false
+  xy: 775, 12
+  size: 73, 78
+  orig: 73, 78
+  offset: 0, 0
+  index: -1
+mouth
+  rotate: false
+  xy: 494, 7
+  size: 43, 48
+  orig: 43, 48
+  offset: 0, 0
+  index: -1
+nose
+  rotate: false
+  xy: 706, 59
+  size: 35, 31
+  orig: 35, 31
+  offset: 0, 0
+  index: -1
+sword
+  rotate: true
+  xy: 2, 11
+  size: 394, 182
+  orig: 394, 182
+  offset: 0, 0
+  index: -1
+sword sheat
+  rotate: true
+  xy: 706, 92
+  size: 313, 208
+  orig: 313, 208
+  offset: 0, 0
+  index: -1
