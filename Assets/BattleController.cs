@@ -10,8 +10,8 @@ public class BattleController : MonoBehaviour
 
     [SerializeField] UnitStatsUIController unitStatsUI;
 
-    [SerializeField] UnitStatsUI leftUI;
-    [SerializeField] UnitStatsUI rightUI;
+    //[SerializeField] UnitStatsUI leftUI;
+    //[SerializeField] UnitStatsUI rightUI;
 
     [SerializeField] List<BattleCharacter> allies;//0 1 2
     [SerializeField] List<BattleCharacter> enemies;//3 4 5
@@ -24,30 +24,28 @@ public class BattleController : MonoBehaviour
 
     public void SetCurrentCharacter(BattleCharacter character)
     {
-        leftUI.gameObject.SetActive(true);
-        leftUI.SetData(character);
+        unitStatsUI.Show(character.CharacterData, UnitStatsUIController.Side.Left);
+
+        if(current_character!=null)current_character.Focus(false);
         current_character = character;
-        character.OverheadUI.gameObject.SetActive(true);
+        character.Focus(true);
+        //character.OverheadUI.gameObject.SetActive(true);
     }
 
     public void SetTargetCharacter(BattleCharacter character)
     {
         if (character == current_character)
         {
+            target_character.Focus(false);
             target_character = null;
-            ClearTargetCharacter();
+            unitStatsUI.Clear(UnitStatsUIController.Side.Right);
         }
         else
         {
-            rightUI.gameObject.SetActive(true);
-            rightUI.SetData(character);
+            unitStatsUI.Show(character.CharacterData, UnitStatsUIController.Side.Right);
+            if(target_character!=null) target_character.Focus(false);
             target_character = character;
         }
-    }
-
-    public void ClearTargetCharacter()
-    {
-        rightUI.gameObject.SetActive(false);
     }
 
     void Start()
@@ -74,8 +72,9 @@ public class BattleController : MonoBehaviour
 
     public void ExecuteTurn()
     {
-        //turns[0]
+        SetCurrentCharacter(turns[currentTurn]);
         EnterTurn(turns[currentTurn]);
+        unitStatsUI.Clear(UnitStatsUIController.Side.Right);
     }
 
     void EnterTurn(BattleCharacter character)

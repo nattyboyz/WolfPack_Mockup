@@ -22,7 +22,7 @@ public class UnitStatsUIController : MonoBehaviour
         }
     }
 
-    public void ClearFocus(Side side)
+    public void Clear(Side side)
     {
         if (side == Side.Left)
         {

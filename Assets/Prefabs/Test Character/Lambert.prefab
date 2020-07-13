@@ -108,7 +108,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7869886200086443018}
-  m_LocalRotation: {x: 0.13052616, y: -0, z: -0, w: 0.9914449}
+  m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
   m_LocalPosition: {x: -5.5, y: 0, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -188,8 +188,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  id: 
   characterData: {fileID: 7869886200086443012}
-  overheadUI: {fileID: 0}
+  overheadUI: {fileID: 8972894312946068752}
 --- !u!114 &7869886200086443012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,29 +204,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseData: {fileID: 11400000, guid: e81a5bd5a2d45de4090a04ff8d08c804, type: 2}
-  battleData:
-    hp: 50
-    maxHp: 120
-    sp: 2
-    maxSp: 5
-    level: 0
-    attack: 0
-    defense: 0
-    speed: 0
-    gems: 01000000020000000000000000000000
-    gemStack: 0
-    emote: idle
   portraitData: {fileID: 11400000, guid: ef678448c81984d41a1d4b48fa052967, type: 2}
   stats:
-    hp: 0
-    maxHp: 0
-    sp: 0
-    maxSp: 0
-    stack: 0
-    level: 0
-    attack: 0
-    defense: 0
-    speed: 0
+    hp: 50
+    maxHp: 100
+    sp: 20
+    maxSp: 50
+    stack: 1
+    level: 2
+    attack: 10
+    defense: 8
+    speed: 10
 --- !u!1001 &7869886198847252695
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -371,3 +360,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7869886198847252695}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8972894312946068752 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1274919034811303367, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+    type: 3}
+  m_PrefabInstance: {fileID: 7869886198847252695}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf25d1a7a97d8594b85ef95e90ac7a5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
