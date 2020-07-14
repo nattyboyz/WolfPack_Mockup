@@ -134,18 +134,7 @@ MonoBehaviour:
       m_Calls: []
   onEnter:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: SetData
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 7869886200086443013}
-          m_ObjectArgumentAssemblyTypeName: BattleCharacter, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onExit:
     m_PersistentCalls:
       m_Calls: []
@@ -190,6 +179,7 @@ MonoBehaviour:
   type: 0
   id: 
   characterData: {fileID: 7869886200086443012}
+  graphic: {fileID: 7869886200086443018}
   overheadUI: {fileID: 8972894312946068752}
 --- !u!114 &7869886200086443012
 MonoBehaviour:
@@ -222,26 +212,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7869886200086443019}
     m_Modifications:
-    - target: {fileID: 1157931004144469496, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1157931004144469496, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1157931004144469496, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1157931004144469496, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
       propertyPath: m_LocalPosition.x
