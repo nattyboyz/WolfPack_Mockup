@@ -11,6 +11,7 @@ public class BattleController : MonoBehaviour
 
     [SerializeField] UnitStatsUIController unitStatsUI;
     [SerializeField] ActionUIController actionUI;
+    [SerializeField] ActUI actUI;
 
     [SerializeField] List<BattleCharacter> allies;//0 1 2
     [SerializeField] List<BattleCharacter> enemies;//3 4 5
@@ -112,6 +113,13 @@ public class BattleController : MonoBehaviour
 
     public void ShowActionUI(BattleCharacter character)
     {
+        actionUI.onActClick = actionUI.onAttackClick = 
+            actionUI.onItemClick = actionUI.onSkipClick =
+        () => {
+            actUI.Init(character, this);
+            actUI.Active(true);
+        };
+
         actionUI.Show(character.transform.position);
     }
 

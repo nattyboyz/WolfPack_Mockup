@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ActionUIController : MonoBehaviour
 {
     [SerializeField] Canvas main_canvas;
     [SerializeField] BattleController battleCtrl;
-
+    public Action onAttackClick;
+    public Action onActClick;
+    public Action onItemClick;
+    public Action onSkipClick;
 
     private void Start()
     {
@@ -29,30 +33,34 @@ public class ActionUIController : MonoBehaviour
 
     public void Btn_Attack()
     {
-        battleCtrl.MoveTurnForward();
-        battleCtrl.ExecuteTurn();
+        //battleCtrl.MoveTurnForward();
+        //battleCtrl.ExecuteTurn();
         Hide();
+        onAttackClick?.Invoke();
     }
 
     public void Btn_Act()
     {
-        battleCtrl.MoveTurnForward();
-        battleCtrl.ExecuteTurn();
+        //battleCtrl.MoveTurnForward();
+        //battleCtrl.ExecuteTurn();
         Hide();
+        onAttackClick?.Invoke();
     }
 
     public void Btn_Item()
     {
-        battleCtrl.MoveTurnForward();
-        battleCtrl.ExecuteTurn();
+        //battleCtrl.MoveTurnForward();
+        //battleCtrl.ExecuteTurn();
         Hide();
+        onItemClick?.Invoke();
     }
 
     public void Btn_Skip()
     {
-        battleCtrl.MoveTurnForward();
-        battleCtrl.ExecuteTurn();
+        //battleCtrl.MoveTurnForward();
+        //battleCtrl.ExecuteTurn();
         Hide();
+        onSkipClick?.Invoke();
     }
 
     #endregion
