@@ -5,11 +5,13 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using System;
+using DG.Tweening;
 
 public class ActButton : SkillButton, IPointerEnterHandler, 
-    IPointerExitHandler, IPointerDownHandler, ISelectHandler,
-    IDeselectHandler, IPointerClickHandler
+    IPointerExitHandler, ISelectHandler,
+    IDeselectHandler, IPointerClickHandler, ISubmitHandler
 {
+    [SerializeField] protected Image main_img;
     [SerializeField] protected Image[] gem_imgs;
 
     [SerializeField] Color enterColor;
@@ -18,68 +20,90 @@ public class ActButton : SkillButton, IPointerEnterHandler,
     public Action<ActButton> onEnter;
     public Action<ActButton> onExit;
 
-    public override void OnPointerDown(PointerEventData eventData)
+    public void Focus(bool value)
     {
-        base.OnPointerDown(eventData);
-        name_txt.color = enterColor;
+        if (value)
+        {
+            name_txt.color = enterColor;
+            main_img.rectTransform.anchoredPosition = new Vector2(17,0);
+        }
+        else
+        {
+            name_txt.color = normalTextColor;
+            main_img.rectTransform.anchoredPosition = new Vector2(0, 0);
+        }
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        onClick?.Invoke();
+        Focus(false);
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
         base.OnPointerEnter(eventData);
-        name_txt.color = enterColor;
-        onEnter?.Invoke(this);
+        Focus(true);
+         onEnter?.Invoke(this);
     }
 
     public override void OnPointerExit(PointerEventData eventData)
     {
         base.OnPointerExit(eventData);
-        name_txt.color = normalTextColor;
+        Focus(false);
         onExit?.Invoke(this);
     }
 
     public override void OnSelect(BaseEventData eventData)
     {
         base.OnSelect(eventData);
-        name_txt.color = enterColor;
+        Focus(true);
         onEnter?.Invoke(this);
     }
 
     public override void OnDeselect(BaseEventData eventData)
     {
         base.OnDeselect(eventData);
-        name_txt.color = normalTextColor;
+        Focus(false);
         onExit?.Invoke(this);
     }
 
     public void Set(SkillData skillData)
     {
-        name_txt.text = skillData.name;
-        sp_txt.text = skillData.sp.ToString();
-        for(int i = 0; i < gem_imgs.Length; i++)
+        if (skillData == null)
         {
-            if (skillData.gems.Length > i && skillData.gems[i] != Gem.None)
-            {
-                gem_imgs[i].gameObject.SetActive(true);
-            }
-            else
+            name_txt.text = "";
+            sp_txt.text = "";
+            interactable = false;
+            for (int i = 0; i < gem_imgs.Length; i++)
             {
                 gem_imgs[i].gameObject.SetActive(false);
             }
         }
+        else
+        {
+            name_txt.text = skillData.SkillName;
+            sp_txt.text = skillData.Sp.ToString();
+            for (int i = 0; i < gem_imgs.Length; i++)
+            {
+                if (skillData.Gems.Length > i && skillData.Gems[i] != Gem.None)
+                {
+                    gem_imgs[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    gem_imgs[i].gameObject.SetActive(false);
+                }
+            }
+            interactable = true;
+        }
+
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnSubmit(BaseEventData eventData)
     {
         onClick?.Invoke();
+        Focus(false);
     }
-}
-
-public class SkillData
-{
-    public string name = "skill";
-    public int sp = 5;
-    public Gem[] gems = new Gem[4] {Gem.None,Gem.None,Gem.None,Gem.None };
-    public string lore = "this is a very powerful skill";
-    public string description = "Take gx2 for 2 turn";
 }

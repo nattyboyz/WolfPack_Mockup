@@ -8,6 +8,5 @@ public class SkillButton : Selectable
 {
     [SerializeField] protected TextMeshProUGUI name_txt;
     [SerializeField] protected TextMeshProUGUI sp_txt;
-    //[SerializeField] protected Button button;
 
 }

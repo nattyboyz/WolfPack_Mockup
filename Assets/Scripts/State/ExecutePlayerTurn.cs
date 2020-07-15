@@ -25,7 +25,7 @@ public class ExecutePlayerTurn : State
 
     IEnumerator ieEnter()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.2f);
         //battleCtrl.MoveTurnForward();
         //battleCtrl.ExecuteTurn();
         battleCtrl.ShowActionUI(character);

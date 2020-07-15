@@ -134,18 +134,7 @@ MonoBehaviour:
       m_Calls: []
   onEnter:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: SetData
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 5012090045690629043}
-          m_ObjectArgumentAssemblyTypeName: BattleCharacter, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onExit:
     m_PersistentCalls:
       m_Calls: []
@@ -190,6 +179,7 @@ MonoBehaviour:
   type: 0
   id: 
   characterData: {fileID: 5012090045690629068}
+  graphic: {fileID: 5012090045690629070}
   overheadUI: {fileID: 6070827336164080866}
 --- !u!114 &5012090045690629068
 MonoBehaviour:
@@ -215,6 +205,13 @@ MonoBehaviour:
     attack: 10
     defense: 8
     speed: 8
+    skills:
+    - {fileID: 11400000, guid: 3581315efaeb2d74e972e51c81cf7522, type: 2}
+    - {fileID: 11400000, guid: e33bef3c2548e7741811a78a2ba0b51b, type: 2}
+    - {fileID: 11400000, guid: d06d38b8da35f3245ac6f929421f382e, type: 2}
+    - {fileID: 11400000, guid: e2bb99d5d99423444b55a9a3e14a8580, type: 2}
+    - {fileID: 11400000, guid: 0cfd9b612319cde458fc1760650ef72f, type: 2}
+    - {fileID: 11400000, guid: 2e4c6c93dc11a144e9d77ae2406f14c9, type: 2}
 --- !u!1001 &5012090045285644581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -241,6 +238,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}

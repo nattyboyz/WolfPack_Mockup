@@ -152,7 +152,6 @@ public class BattleController : MonoBehaviour
     public void LoadLevel()
     {
         //Set chacter positions
-
     }
 
     void Spawn()
@@ -169,3 +168,5 @@ public class BattleController : MonoBehaviour
     }
 
 }
+
+

@@ -205,6 +205,12 @@ MonoBehaviour:
     attack: 10
     defense: 8
     speed: 10
+    skills:
+    - {fileID: 11400000, guid: 0cfd9b612319cde458fc1760650ef72f, type: 2}
+    - {fileID: 11400000, guid: e2bb99d5d99423444b55a9a3e14a8580, type: 2}
+    - {fileID: 11400000, guid: 2e4c6c93dc11a144e9d77ae2406f14c9, type: 2}
+    - {fileID: 11400000, guid: 3581315efaeb2d74e972e51c81cf7522, type: 2}
+    - {fileID: 11400000, guid: e33bef3c2548e7741811a78a2ba0b51b, type: 2}
 --- !u!1001 &7869886198847252695
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -212,6 +218,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7869886200086443019}
     m_Modifications:
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
       propertyPath: m_LocalPosition.x

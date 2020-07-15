@@ -14,10 +14,11 @@ public class CharacterData : MonoBehaviour
     public UnitBattleData BattleData { get => battleData; set => battleData = value; }
     public CharacterBaseData BaseData { get => baseData; set => baseData = value; }
     public PortraitData PortraitData { get => portraitData; set => portraitData = value; }
+    public CharacterStats Stats { get => stats; set => stats = value; }
 
     public void Start()
     {
-        BattleData = stats.Clone();
+        BattleData = stats.BattleData();
     }
 }
 
@@ -33,9 +34,9 @@ public class CharacterStats
     public int attack;
     public int defense;
     public int speed;
+    public SkillData[] skills;
 
-
-    public UnitBattleData Clone()
+    public UnitBattleData BattleData()
     {
         UnitBattleData data = new UnitBattleData();
         data.hp = this.hp;
@@ -55,6 +56,11 @@ public class CharacterStats
         return data;
 
     }
+}
+
+public class SkillSet
+{
+    List<SkillData> skills = new List<SkillData>();
 }
 
 [Serializable]

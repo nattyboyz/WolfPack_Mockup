@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class ActionUIController : MonoBehaviour
 {
     [SerializeField] Canvas main_canvas;
     [SerializeField] BattleController battleCtrl;
+    [SerializeField] Selectable start_selector;
     public Action onAttackClick;
     public Action onActClick;
     public Action onItemClick;
     public Action onSkipClick;
-
+ 
     private void Start()
     {
         Hide();
@@ -19,8 +21,9 @@ public class ActionUIController : MonoBehaviour
 
     public void Show(Vector3 pos)
     {
-        main_canvas.enabled = true;
         main_canvas.transform.position = pos;
+        main_canvas.enabled = true;
+        start_selector.Select();
     }
 
     public void Hide()
@@ -44,7 +47,7 @@ public class ActionUIController : MonoBehaviour
         //battleCtrl.MoveTurnForward();
         //battleCtrl.ExecuteTurn();
         Hide();
-        onAttackClick?.Invoke();
+        onActClick?.Invoke();
     }
 
     public void Btn_Item()
