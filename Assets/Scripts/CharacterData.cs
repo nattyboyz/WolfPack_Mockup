@@ -11,14 +11,14 @@ public class CharacterData : MonoBehaviour
     [SerializeField] CharacterStats stats;
 
 
-    public UnitBattleData BattleData { get => battleData; set => battleData = value; }
-    public CharacterBaseData BaseData { get => baseData; set => baseData = value; }
-    public PortraitData PortraitData { get => portraitData; set => portraitData = value; }
+    public UnitBattleData Battle { get => battleData; set => battleData = value; }
+    public CharacterBaseData Base { get => baseData; set => baseData = value; }
+    public PortraitData Portrait { get => portraitData; set => portraitData = value; }
     public CharacterStats Stats { get => stats; set => stats = value; }
 
     public void Start()
     {
-        BattleData = stats.BattleData();
+        Battle = stats.BattleData();
     }
 }
 
@@ -34,6 +34,8 @@ public class CharacterStats
     public int attack;
     public int defense;
     public int speed;
+    public bool isDead = false;
+
     public SkillData[] skills;
 
     public UnitBattleData BattleData()
@@ -53,9 +55,12 @@ public class CharacterStats
             GemType.None,
             GemType.None,
             GemType.None };
+        data.isDead = this.isDead;
+
         return data;
 
     }
+
 }
 
 public class SkillSet
@@ -79,4 +84,17 @@ public class UnitBattleData
     public GemType[] gems;
     public int gemStack = 0;
     public string emote = "idle";
+    public bool isDead;
+
+    public int target_slot = 0;
+
+    public void ModifyHp()
+    {
+      
+    }
+
+    public void ModifySp()
+    {
+
+    }
 }

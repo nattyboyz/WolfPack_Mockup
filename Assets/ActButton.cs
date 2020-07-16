@@ -16,6 +16,8 @@ public class ActButton : SkillButton, IPointerEnterHandler,
 
     [SerializeField] Color enterColor;
     [SerializeField] Color normalTextColor;
+
+    public bool allowSubmit = true;
     public Action onClick;
     public Action<ActButton> onEnter;
     public Action<ActButton> onExit;
@@ -37,6 +39,7 @@ public class ActButton : SkillButton, IPointerEnterHandler,
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!allowSubmit) return;
         onClick?.Invoke();
         Focus(false);
     }
@@ -103,6 +106,7 @@ public class ActButton : SkillButton, IPointerEnterHandler,
 
     public void OnSubmit(BaseEventData eventData)
     {
+        if(!allowSubmit ) return;
         onClick?.Invoke();
         Focus(false);
     }

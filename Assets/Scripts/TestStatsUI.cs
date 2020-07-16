@@ -12,26 +12,26 @@ public class TestStatsUI : MonoBehaviour
     [SerializeField] GameObject[] leftStatsUI;
     [SerializeField] GameObject[] rightStatsUI;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            ChangeMode();
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        ChangeMode();
+    //    }
+    //}
 
-    void ChangeMode()
-    {
-        if(mode== TargetMode.Left)
-        {
-            mode = TargetMode.Right;
-        }
-        else
-        {
-            mode = TargetMode.Left;
-        }
-        Debug.Log("Change mode to " + mode);
-    }
+    //void ChangeMode()
+    //{
+    //    if(mode== TargetMode.Left)
+    //    {
+    //        mode = TargetMode.Right;
+    //    }
+    //    else
+    //    {
+    //        mode = TargetMode.Left;
+    //    }
+    //    Debug.Log("Change mode to " + mode);
+    //}
 
     public void ShowBotUI(int index)
     {

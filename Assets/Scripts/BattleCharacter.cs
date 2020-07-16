@@ -17,7 +17,7 @@ public class BattleCharacter : MonoBehaviour
     [SerializeField] OverHeadUI overheadUI;
 
 
-    public CharacterData CharacterData { get => characterData;}
+    public CharacterData Data { get => characterData;}
     public OverHeadUI OverheadUI { get => overheadUI;}
     public Team Type { get => type; set => type = value; }
 

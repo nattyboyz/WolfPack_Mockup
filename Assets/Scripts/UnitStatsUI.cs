@@ -17,16 +17,16 @@ public class UnitStatsUI : MonoBehaviour
 
     public void SetData(CharacterData data)
     {
-        hpUi.SetData(0, data.BattleData.maxHp, data.BattleData.hp);
-        spUi.SetData(0, data.BattleData.maxSp, data.BattleData.sp);
-        name_txt.text = data.BaseData.c_name;
-        diamondUI.SetGem(data.BattleData.gems);
-        portrait_img.sprite = data.PortraitData.Sprites[data.BattleData.emote];
+        hpUi.SetData(0, data.Battle.maxHp, data.Battle.hp);
+        spUi.SetData(0, data.Battle.maxSp, data.Battle.sp);
+        name_txt.text = data.Base.c_name;
+        diamondUI.SetGem(data.Battle.gems);
+        portrait_img.sprite = data.Portrait.Sprites[data.Battle.emote];
     }
 
     public void SetData(BattleCharacter character)
     {
-        SetData(character.CharacterData);
+        SetData(character.Data);
     }
 
 }

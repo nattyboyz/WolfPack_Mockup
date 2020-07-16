@@ -9,17 +9,15 @@ public class BattleController : MonoBehaviour
     BattleCharacter current_character;
     BattleCharacter target_character;
 
+    [SerializeField] UnitSelection unitSelection;
     [SerializeField] UnitStatsUIController unitStatsUI;
     [SerializeField] ActionUIController actionUI;
     [SerializeField] ActUI actUI;
-
+ 
     [SerializeField] List<BattleCharacter> allies;//0 1 2
     [SerializeField] List<BattleCharacter> enemies;//3 4 5
 
     [SerializeField] List<BattleCharacter> turns;
-
-    [SerializeField] Transform[] alliesSpawnPos;
-    [SerializeField] Transform[] enemiesSpawnPos;
 
     StateMachine turnbaseState;
     public StateMachine TurnbaseState { get => turnbaseState; set => turnbaseState = value; }
@@ -27,6 +25,7 @@ public class BattleController : MonoBehaviour
     public void Init()
     {
         turnbaseState = new StateMachine();
+        unitSelection.InitSelection();
 
         turnbaseState.AddState(new ExecuteEnemyTurn(this));
         turnbaseState.AddState(new ExecutePlayerTurn(this));
@@ -36,12 +35,12 @@ public class BattleController : MonoBehaviour
     {
         if (character.Type == Team.Player)
         {
-            unitStatsUI.Show(character.CharacterData, UnitStatsUIController.Side.Left);
+            unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Left);
             unitStatsUI.Clear(UnitStatsUIController.Side.Right);
         }
         else//CPU
         {
-            unitStatsUI.Show(character.CharacterData, UnitStatsUIController.Side.Right);
+            unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Right);
             unitStatsUI.Clear(UnitStatsUIController.Side.Left);
         }
 
@@ -64,14 +63,14 @@ public class BattleController : MonoBehaviour
         }
         else
         {
-            unitStatsUI.Show(character.CharacterData, UnitStatsUIController.Side.Right);
+            unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Right);
             if(target_character!=null) target_character.Focus(false);
             target_character = character;
 
             if (current_character.Type == Team.Player)
-                unitStatsUI.Show(character.CharacterData, UnitStatsUIController.Side.Right);
+                unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Right);
             else
-                unitStatsUI.Show(character.CharacterData, UnitStatsUIController.Side.Left);
+                unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Left);
         }
     }
 
@@ -91,13 +90,13 @@ public class BattleController : MonoBehaviour
         //Set turn depend by speed
         turns = new List<BattleCharacter>(allies);
         turns.AddRange(enemies);
-        IEnumerable<BattleCharacter> query = turns.OrderByDescending(turns => turns.CharacterData.BattleData.speed);
+        IEnumerable<BattleCharacter> query = turns.OrderByDescending(turns => turns.Data.Battle.speed);
         turns = query.ToList<BattleCharacter>();
         int i = 0;
         foreach (BattleCharacter c in query)
         {
             i++;
-            Debug.Log(i + " " +c.CharacterData.BaseData.c_name);
+           // Debug.Log(i + " " +c.Data.Base.c_name);
         }
     }
 
@@ -130,12 +129,12 @@ public class BattleController : MonoBehaviour
         {
             //Enter allie turn
 
-            Debug.Log("Battle: Enter turn " + "[Player]" + character.CharacterData.name);
+           // Debug.Log("Battle: Enter turn " + "[Player]" + character.Data.name);
             TurnbaseState.TransitionToState(typeof(ExecutePlayerTurn), character);
         }
         else
         {
-            Debug.Log("Battle: Enter turn "+"[CPU]"+ character.CharacterData.name);
+           // Debug.Log("Battle: Enter turn "+"[CPU]"+ character.Data.name);
             TurnbaseState.TransitionToState(typeof(ExecuteEnemyTurn), character);
             //Enter cpu turn
         }
@@ -149,22 +148,25 @@ public class BattleController : MonoBehaviour
         if (currentTurn >= turns.Count) currentTurn = 0;
     }
 
-    public void LoadLevel()
+    public void ApplySkill(BattleCharacter owner,
+        List<BattleCharacterSlot> targets,
+        SkillData skil)
     {
-        //Set chacter positions
-    }
-
-    void Spawn()
-    {
-        for(int i =0;i< allies.Count; i++)
+        string s = "";
+        foreach (BattleCharacterSlot slot in targets)
         {
-            allies[i].transform.position = alliesSpawnPos[i].position;
+            if (slot.Character != null)
+            {
+                s += slot.Character.Data.Base.c_name +", ";
+            }
         }
 
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            enemies[i].transform.position = enemiesSpawnPos[i].position;
-        }
+        Debug.Log("[BattleCrtl]: ["+ owner.Data.Base.c_name +
+            "] apply skill <b>[" + 
+            skil.SkillName+ "]</b> to " + s);
+
+        MoveTurnForward();
+        ExecuteTurn();
     }
 
 }

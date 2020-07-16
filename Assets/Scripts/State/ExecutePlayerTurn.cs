@@ -17,7 +17,7 @@ public class ExecutePlayerTurn : State
     public override void OnEnter(object args)
     {
         this.character = args as BattleCharacter;
-        Debug.Log("Player State: Enter turn " + "[Player]" + this.character.CharacterData.name);
+        //Debug.Log("Player State: Enter turn " + "[Player]" + this.character.Data.name);
         battleCtrl.StartCoroutine(ieEnter());
 
         //battleCtrl.TurnbaseState.TransitionToState(typeof(ExecuteCommand), units);
@@ -33,7 +33,7 @@ public class ExecutePlayerTurn : State
 
     public override void OnExit()
     {
-        Debug.Log("Player State: Exit turn " + "[Player]" + this.character.CharacterData.name);
+        //Debug.Log("Player State: Exit turn " + "[Player]" + this.character.Data.name);
         //base.OnExit();
     }
 }
