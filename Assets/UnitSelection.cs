@@ -15,7 +15,7 @@ public class UnitSelection : MonoBehaviour
 
     [SerializeField] List<BattleCharacterSlot> selected_slots;
 
-    int oldTarget = 0;
+    int selected_index = 0;
     int currentTeam = 0;
 
 
@@ -44,7 +44,7 @@ public class UnitSelection : MonoBehaviour
         if (mode == TargetMode.Single)
         {
             Select(new List<BattleCharacterSlot> { allSlot[startValue] });
-            oldTarget = startValue;
+            selected_index = startValue;
         }
         else
         {
@@ -103,21 +103,30 @@ public class UnitSelection : MonoBehaviour
     //-1 +1
     public void TargetShift(int mod)
     {
-        int target = oldTarget;
+        int target = selected_index;
+        if (selected_index < 0) target = selected_index = 0;
+
         BattleCharacter character = null;
+        int time = 0;
         do
         {
+            if (time > allSlot.Count)
+            {
+                Deselect(new List<BattleCharacterSlot>() { allSlot[selected_index] });
+                return;
+            }
             if (target + mod >= allSlot.Count) target = 0;
             else if (target + mod < 0) target = allSlot.Count - 1;
             else target += mod;
             character = allSlot[target].Character;
+            time++;
 
         } while (character == null || character.Data.Battle.isDead);
 
-        Deselect(new List<BattleCharacterSlot>() { allSlot[oldTarget] });
+        Deselect(new List<BattleCharacterSlot>() { allSlot[selected_index] });
         Select(new List<BattleCharacterSlot>() { allSlot[target] });
 
-        oldTarget = target; 
+        selected_index = target; 
         //Debug.Log("Select " + character.Data.Base.c_name);
     }
 

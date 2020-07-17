@@ -2,65 +2,57 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActUI : MonoBehaviour
+public class ActUI : ListoUI
 {
-    [SerializeField] UnitSelection unitSelection;
-    [SerializeField] UnitStatsUIController unitStatsUI;
+    [Header("Act UI")]
+    [SerializeField] protected UnitSelection unitSelection;
+    [SerializeField] protected UnitStatsUIController unitStatsUI;
+    [SerializeField] protected SkillData[] skills;
 
-    [SerializeField] List<ActButton> buttons = new List<ActButton>();
-    [SerializeField] Canvas main_canvas;
-    [SerializeField] Selectable start_selector;
-    int selected_index = 0;
-    int page = 1;
-    int maxPage = 2;
-
-    void Start()
+    protected override void Start()
     {
         Active(false);
-
     }
 
     public void Init(BattleCharacter character, BattleController battleCtrl)
     {
         transform.position = new Vector3(character.transform.position.x, character.transform.position.y +4.5f, character.transform.position.z);
-        SkillData[] skils = character.Data.Stats.skills;
-        for(int i = 0; i < buttons.Count; i++)
-        {
-            SkillData data = null;
-            if(skils.Length > i * page)
-            {
-                data = character.Data.Stats.skills[i];
-            }
+        skills = character.Data.Stats.skills;
 
-            if (data != null)
-            {
-                buttons[i].onClick = () =>
-                {  
-                    unitSelection.onCancel = () => {
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i].Set(skills[i]);
+            buttons[i].value = i.ToString();
+            buttons[i].onClick = (value) =>
+                {
+                    unitSelection.onCancel = () =>
+                    {
                         Active(true);
                     };
-                    unitSelection.onSubmit = (slots) => {
-                        battleCtrl.ApplySkill(character, slots, data);
+                    unitSelection.onSubmit = (slots) =>
+                    {
+                        int idx;
+                        if (int.TryParse(value, out idx))
+                        {
+                            battleCtrl.ApplySkill(character,
+                                slots,
+                                character.Data.Stats.skills[idx]);
+                        }
                     };
-                    unitSelection.onSelect = (slots) => {
+                    unitSelection.onSelect = (slots) =>
+                    {
                         unitStatsUI.Show(slots[0].Character.Data, UnitStatsUIController.Side.Right);
                     };
 
-                    unitSelection.ActiveUnitSelection(TargetMode.Single,3);
+                    unitSelection.ActiveUnitSelection(TargetMode.Single, 3);
                     Active(false);
                     //Debug.Log("Click button");
                 };
-            }
-            else
-            {
-                buttons[i].onClick = null;
-            }
 
-            buttons[i].Set(data);
         }
     }
 
-    void SubmitTarget(List<BattleCharacterSlot> slots)
+    protected void SubmitTarget(List<BattleCharacterSlot> slots)
     {
 
     }
@@ -79,10 +71,9 @@ public class ActUI : MonoBehaviour
     //                button.transform.localPosition.z);
     //}
 
-
-
-    public void Active(bool active)
+    public override void Active(bool active)
     {
+        base.Active(active);
         if (active)
         {
             foreach(ActButton btn in buttons)
@@ -101,5 +92,37 @@ public class ActUI : MonoBehaviour
             }
         }
         main_canvas.enabled = active;
+    }
+
+    public override void PageShift(int mod)
+    {
+        int target = page;
+        int maxP = Mathf.FloorToInt((float)skills.Length / (float)button_per_page);
+        //Debug.Log("Max page " + maxP);
+
+        if (target + mod < 0) target = maxP;
+        else if (target + mod > maxP) target = 0;
+        else target += mod;
+
+        //Debug.Log("target " + target);
+
+        int start = button_per_page * target;
+        int c = skills.Length;
+
+        for (int i = 0; i < button_per_page; i++)
+        {
+            if (i + start < c)
+            {
+                buttons[i].Set(skills[i + start]);
+                buttons[i].value = (i + start).ToString();
+                //buttons[i].Set(data);
+            }
+            else
+            {
+                buttons[i].Hide();
+            }
+        }
+
+        page = target;
     }
 }

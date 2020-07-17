@@ -7,20 +7,14 @@ using UnityEngine.EventSystems;
 using System;
 using DG.Tweening;
 
-public class ActButton : SkillButton, IPointerEnterHandler, 
-    IPointerExitHandler, ISelectHandler,
-    IDeselectHandler, IPointerClickHandler, ISubmitHandler
+public class ActButton : ListoButton
 {
+    [SerializeField] protected TextMeshProUGUI sp_txt;
     [SerializeField] protected Image main_img;
     [SerializeField] protected Image[] gem_imgs;
 
     [SerializeField] Color enterColor;
     [SerializeField] Color normalTextColor;
-
-    public bool allowSubmit = true;
-    public Action onClick;
-    public Action<ActButton> onEnter;
-    public Action<ActButton> onExit;
 
     public void Focus(bool value)
     {
@@ -36,16 +30,9 @@ public class ActButton : SkillButton, IPointerEnterHandler,
         }
     }
 
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (!allowSubmit) return;
-        onClick?.Invoke();
-        Focus(false);
-    }
-
     public override void OnPointerEnter(PointerEventData eventData)
     {
+        if (!allowSubmit || !interactable) return;
         base.OnPointerEnter(eventData);
         Focus(true);
          onEnter?.Invoke(this);
@@ -53,6 +40,7 @@ public class ActButton : SkillButton, IPointerEnterHandler,
 
     public override void OnPointerExit(PointerEventData eventData)
     {
+        if (!allowSubmit || !interactable) return;
         base.OnPointerExit(eventData);
         Focus(false);
         onExit?.Invoke(this);
@@ -60,6 +48,7 @@ public class ActButton : SkillButton, IPointerEnterHandler,
 
     public override void OnSelect(BaseEventData eventData)
     {
+        if (!allowSubmit || !interactable) return;
         base.OnSelect(eventData);
         Focus(true);
         onEnter?.Invoke(this);
@@ -76,13 +65,7 @@ public class ActButton : SkillButton, IPointerEnterHandler,
     {
         if (skillData == null)
         {
-            name_txt.text = "";
-            sp_txt.text = "";
-            interactable = false;
-            for (int i = 0; i < gem_imgs.Length; i++)
-            {
-                gem_imgs[i].gameObject.SetActive(false);
-            }
+            Hide();
         }
         else
         {
@@ -100,14 +83,43 @@ public class ActButton : SkillButton, IPointerEnterHandler,
                 }
             }
             interactable = true;
+            main_img.gameObject.SetActive(true);
         }
 
     }
 
-    public void OnSubmit(BaseEventData eventData)
+    public void Set(string detail)
     {
-        if(!allowSubmit ) return;
-        onClick?.Invoke();
+        name_txt.text = detail;
+        interactable = true;
+
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+        name_txt.text = "";
+        sp_txt.text = "";
+        interactable = false;
+        for (int i = 0; i < gem_imgs.Length; i++)
+        {
+            gem_imgs[i].gameObject.SetActive(false);
+        }
+        main_img.gameObject.SetActive(false);
+    }
+
+
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        if (!allowSubmit || !interactable) return;
+        onClick?.Invoke(value);
+        Focus(false);
+    }
+
+    public override void OnSubmit(BaseEventData eventData)
+    {
+        if (!allowSubmit || !interactable) return;
+        onClick?.Invoke(value);
         Focus(false);
     }
 }
