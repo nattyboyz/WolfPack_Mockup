@@ -36,7 +36,8 @@ public class CharacterStats
     public int speed;
     public bool isDead = false;
 
-    public SkillData[] skills;
+    public ActSkillData[] actSkills;
+    public BattleSkillData[] battleSkills;
 
     public UnitBattleData BattleData()
     {
@@ -65,7 +66,7 @@ public class CharacterStats
 
 public class SkillSet
 {
-    List<SkillData> skills = new List<SkillData>();
+    List<ActSkillData> skills = new List<ActSkillData>();
 }
 
 [Serializable]

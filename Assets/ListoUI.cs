@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 
 public class ListoUI : MonoBehaviour
@@ -16,13 +17,12 @@ public class ListoUI : MonoBehaviour
     [SerializeField] protected int page = 0;
     [SerializeField] protected int maxPage = 2;
 
-    [SerializeField] protected List<ActButton> buttons = new List<ActButton>();
+    [SerializeField] protected List<ListoButton> buttons = new List<ListoButton>();
     [SerializeField] List<string> stringList;
 
-    //[SerializeField] KeyCode[] next;
-    //[SerializeField] KeyCode[] previous;
-    //[SerializeField] KeyCode[] nextPage;
-    //[SerializeField] KeyCode[] prevPage;
+    public Action onExit;
+    public Action onBack;
+   
 
     protected virtual void Start()
     {
@@ -54,6 +54,10 @@ public class ListoUI : MonoBehaviour
         {
             PageShift(1);
         }
+        else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            onExit?.Invoke();
+        }
     }
 
     public virtual void TargetShift(int mod)
@@ -61,7 +65,7 @@ public class ListoUI : MonoBehaviour
         int target = selected_index;
         if (selected_index < 0) target = selected_index = 0;
 
-        ActButton btn = null;
+        ListoButton btn = null;
         int time = 0;
         do
         {

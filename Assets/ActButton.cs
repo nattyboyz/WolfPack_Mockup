@@ -9,14 +9,18 @@ using DG.Tweening;
 
 public class ActButton : ListoButton
 {
-    [SerializeField] protected TextMeshProUGUI sp_txt;
-    [SerializeField] protected Image main_img;
-    [SerializeField] protected Image[] gem_imgs;
+    [SerializeField] private TextMeshProUGUI sp_txt;
+    [SerializeField] private Image main_img;
+    [SerializeField] private Image[] gem_imgs;
 
-    [SerializeField] Color enterColor;
-    [SerializeField] Color normalTextColor;
+    [SerializeField] protected Color enterColor;
+    [SerializeField] protected Color normalTextColor;
 
-    public void Focus(bool value)
+    public TextMeshProUGUI Sp_txt { get => sp_txt; set => sp_txt = value; }
+    public Image Main_img { get => main_img; set => main_img = value; }
+    public Image[] Gem_imgs { get => gem_imgs; set => gem_imgs = value; }
+
+    void Focus(bool value)
     {
         if (value)
         {
@@ -61,39 +65,32 @@ public class ActButton : ListoButton
         onExit?.Invoke(this);
     }
 
-    public void Set(SkillData skillData)
-    {
-        if (skillData == null)
-        {
-            Hide();
-        }
-        else
-        {
-            name_txt.text = skillData.SkillName;
-            sp_txt.text = skillData.Sp.ToString();
-            for (int i = 0; i < gem_imgs.Length; i++)
-            {
-                if (skillData.Gems.Length > i && skillData.Gems[i] != Gem.None)
-                {
-                    gem_imgs[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    gem_imgs[i].gameObject.SetActive(false);
-                }
-            }
-            interactable = true;
-            main_img.gameObject.SetActive(true);
-        }
+    //public void Set(ActSkillData skillData)
+    //{
+    //    if (skillData == null)
+    //    {
+    //        Hide();
+    //    }
+    //    else
+    //    {
+    //        name_txt.text = skillData.SkillName;
+    //        sp_txt.text = skillData.Sp.ToString();
+    //        for (int i = 0; i < gem_imgs.Length; i++)
+    //        {
+    //            if (skillData.Gems.Length > i && skillData.Gems[i] != Gem.None)
+    //            {
+    //                gem_imgs[i].gameObject.SetActive(true);
+    //            }
+    //            else
+    //            {
+    //                gem_imgs[i].gameObject.SetActive(false);
+    //            }
+    //        }
+    //        interactable = true;
+    //        main_img.gameObject.SetActive(true);
+    //    }
 
-    }
-
-    public void Set(string detail)
-    {
-        name_txt.text = detail;
-        interactable = true;
-
-    }
+    //}
 
     public override void Hide()
     {
@@ -108,7 +105,6 @@ public class ActButton : ListoButton
         main_img.gameObject.SetActive(false);
     }
 
-
     public override void OnPointerClick(PointerEventData eventData)
     {
         if (!allowSubmit || !interactable) return;
@@ -122,4 +118,6 @@ public class ActButton : ListoButton
         onClick?.Invoke(value);
         Focus(false);
     }
+
+
 }

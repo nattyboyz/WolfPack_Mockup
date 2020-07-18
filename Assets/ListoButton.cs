@@ -18,6 +18,8 @@ public class ListoButton : Selectable, IPointerEnterHandler,
     public Action<ActButton> onExit;
     public string value;
 
+    public TextMeshProUGUI Name_txt { get => name_txt; set => name_txt = value; }
+
     public virtual void OnPointerClick(PointerEventData eventData) { }
 
     public virtual void OnSubmit(BaseEventData eventData) { }
@@ -28,4 +30,10 @@ public class ListoButton : Selectable, IPointerEnterHandler,
         name_txt.text = "";
     }
 
+    public virtual void Set(string detail)
+    {
+        name_txt.text = detail;
+        interactable = true;
+
+    }
 }

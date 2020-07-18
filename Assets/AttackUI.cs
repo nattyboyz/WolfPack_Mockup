@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class ActUI : ListoUI
+public class AttackUI : ListoUI
 {
     [Header("Act UI")]
     [SerializeField] protected UnitSelection unitSelection;
     [SerializeField] protected UnitStatsUIController unitStatsUI;
-    [SerializeField] protected ActSkillData[] skills;
+    [SerializeField] protected BattleSkillData[] skills;
 
     protected override void Start()
     {
@@ -16,10 +16,10 @@ public class ActUI : ListoUI
 
     public void Init(BattleCharacter character, BattleController battleCtrl)
     {
-        transform.position = new Vector3(character.transform.position.x, character.transform.position.y +4.5f, character.transform.position.z);
-        skills = character.Data.Stats.actSkills;
+        transform.position = new Vector3(character.transform.position.x, character.transform.position.y + 4.5f, character.transform.position.z);
+        skills = character.Data.Stats.battleSkills;
         ActButton btn;
-        ActSkillData data;
+        BattleSkillData data;
 
         for (int i = 0; i < buttons.Count; i++)
         {
@@ -37,54 +37,39 @@ public class ActUI : ListoUI
 
             btn.value = i.ToString();
             btn.onClick = (value) =>
+            {
+                unitSelection.onCancel = () =>
                 {
-                    unitSelection.onCancel = () =>
-                    {
-                        Active(true);
-                    };
-                    unitSelection.onSubmit = (slots) =>
-                    {
-                        int idx;
-                        if (int.TryParse(value, out idx))
-                        {
-                            battleCtrl.ApplyActSkill(character,
-                                slots,
-                                character.Data.Stats.actSkills[idx]);
-                        }
-                    };
-                    unitSelection.onSelect = (slots) =>
-                    {
-                        unitStatsUI.Show(slots[0].Character.Data, UnitStatsUIController.Side.Right);
-                    };
-
-                    unitSelection.ActiveUnitSelection(TargetMode.Single, 3);
-                    Active(false);
-                    //Debug.Log("Click button");
+                    Active(true);
                 };
+                unitSelection.onSubmit = (slots) =>
+                {
+                    int idx;
+                    if (int.TryParse(value, out idx))
+                    {
+                        battleCtrl.ApplyBattleSkill(character,
+                            slots,
+                            character.Data.Stats.battleSkills[idx]);
+                    }
+                };
+                unitSelection.onSelect = (slots) =>
+                {
+                    unitStatsUI.Show(slots[0].Character.Data, UnitStatsUIController.Side.Right);
+                };
+
+                unitSelection.ActiveUnitSelection(TargetMode.Single, 3);
+                Active(false);
+            };
 
         }
     }
-
-    //public void OnSelectButton(ActButton button)
-    //{
-    //    button.transform.localPosition = new Vector3(27f,
-    //   button.transform.localPosition.y +10f,
-    //  button.transform.localPosition.z);
-    //}
-
-    //public void OnDeselectButton(ActButton button)
-    //{
-    //    button.transform.localPosition = new Vector3(8.5f,
-    //                button.transform.localPosition.y -10f,
-    //                button.transform.localPosition.z);
-    //}
 
     public override void Active(bool active)
     {
         base.Active(active);
         if (active)
         {
-            foreach(ListoButton b in buttons)
+            foreach (ListoButton b in buttons)
             {
                 ActButton btn = b as ActButton;
                 btn.allowSubmit = true;
@@ -138,7 +123,7 @@ public class ActUI : ListoUI
         page = target;
     }
 
-    public void Set(ActButton btn, ActSkillData skillData)
+    public void Set(ActButton btn, BattleSkillData skillData)
     {
         if (skillData == null)
         {

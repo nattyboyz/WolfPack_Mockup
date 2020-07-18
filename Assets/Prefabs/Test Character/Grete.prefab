@@ -124,11 +124,17 @@ MonoBehaviour:
     attack: 10
     defense: 8
     speed: 9
-    skills:
+    isDead: 0
+    actSkills:
     - {fileID: 11400000, guid: 3581315efaeb2d74e972e51c81cf7522, type: 2}
     - {fileID: 11400000, guid: e33bef3c2548e7741811a78a2ba0b51b, type: 2}
     - {fileID: 11400000, guid: d06d38b8da35f3245ac6f929421f382e, type: 2}
     - {fileID: 11400000, guid: e2bb99d5d99423444b55a9a3e14a8580, type: 2}
+    - {fileID: 11400000, guid: 0cfd9b612319cde458fc1760650ef72f, type: 2}
+    - {fileID: 11400000, guid: 2e4c6c93dc11a144e9d77ae2406f14c9, type: 2}
+    battleSkills:
+    - {fileID: 11400000, guid: a97c209a88e55ee4eab15cf8dba58aa4, type: 2}
+    - {fileID: 11400000, guid: 2b48b3e699b8ad545ace4bdf4c91a2aa, type: 2}
 --- !u!1 &909733580016648921
 GameObject:
   m_ObjectHideFlags: 0
