@@ -91,6 +91,21 @@ public class ActButton : ListoButton
     //    }
 
     //}
+    public void SetGems(Gem[] gems)
+    {
+        for (int i = 0; i < gem_imgs.Length; i++)
+        {
+            if (gems.Length > i && gems[i] != Gem.None)
+            {
+                gem_imgs[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                gem_imgs[i].gameObject.SetActive(false);
+            }
+        }
+
+    }
 
     public override void Hide()
     {

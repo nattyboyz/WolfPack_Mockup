@@ -34,7 +34,6 @@ public class ActUI : ListoUI
 
             btn = buttons[i] as ActButton;
             Set(btn, data);//Set button
-
             btn.value = i.ToString();
             btn.onClick = (value) =>
                 {
@@ -146,12 +145,9 @@ public class ActUI : ListoUI
         }
         else
         {
+            btn.SetGems(skillData.Gems);
             btn.Name_txt.text = skillData.SkillName;
             btn.Sp_txt.text = skillData.Sp.ToString();
-            for (int i = 0; i < btn.Gem_imgs.Length; i++)
-            {
-                btn.Gem_imgs[i].gameObject.SetActive(false);
-            }
             btn.interactable = true;
             btn.Main_img.gameObject.SetActive(true);
         }
