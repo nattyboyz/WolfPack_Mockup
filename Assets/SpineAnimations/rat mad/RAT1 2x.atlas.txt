@@ -1,0 +1,90 @@
+
+RAT1 2x.png
+size: 678,563
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+L_arm
+  rotate: true
+  xy: 543, 195
+  size: 147, 124
+  orig: 147, 124
+  offset: 0, 0
+  index: -1
+L_ear
+  rotate: false
+  xy: 185, 4
+  size: 171, 266
+  orig: 171, 266
+  offset: 0, 0
+  index: -1
+L_eye
+  rotate: true
+  xy: 598, 35
+  size: 67, 72
+  orig: 67, 72
+  offset: 0, 0
+  index: -1
+L_leg
+  rotate: true
+  xy: 358, 23
+  size: 78, 121
+  orig: 85, 121
+  offset: 7, 0
+  index: -1
+R_arm
+  rotate: true
+  xy: 2, 2
+  size: 268, 181
+  orig: 268, 181
+  offset: 0, 0
+  index: -1
+R_ear
+  rotate: false
+  xy: 245, 319
+  size: 164, 242
+  orig: 164, 242
+  offset: 0, 0
+  index: -1
+R_eye
+  rotate: false
+  xy: 543, 104
+  size: 85, 89
+  orig: 85, 89
+  offset: 0, 0
+  index: -1
+R_leg
+  rotate: true
+  xy: 481, 22
+  size: 79, 115
+  orig: 79, 115
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 358, 103
+  size: 183, 214
+  orig: 183, 214
+  offset: 0, 0
+  index: -1
+head
+  rotate: true
+  xy: 2, 272
+  size: 289, 241
+  orig: 289, 241
+  offset: 0, 0
+  index: -1
+hood neck
+  rotate: true
+  xy: 543, 344
+  size: 217, 133
+  orig: 217, 133
+  offset: 0, 0
+  index: -1
+tail
+  rotate: true
+  xy: 411, 359
+  size: 202, 122
+  orig: 343, 161
+  offset: 141, 29
+  index: -1

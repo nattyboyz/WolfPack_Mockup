@@ -13,6 +13,7 @@ public class BattleCharacter : MonoBehaviour
     [SerializeField] CharacterData characterData;
     [Header("Graphic")]
     [SerializeField] GameObject graphic;
+    [SerializeField] CharacterSpine characterSpine;
     [Header("UI")]
     [SerializeField] OverHeadUI overheadUI;
 
@@ -20,6 +21,7 @@ public class BattleCharacter : MonoBehaviour
     public CharacterData Data { get => characterData;}
     public OverHeadUI OverheadUI { get => overheadUI;}
     public Team Type { get => type; set => type = value; }
+    public CharacterSpine CharacterSpine { get => characterSpine; set => characterSpine = value; }
 
     private void Awake()
     {

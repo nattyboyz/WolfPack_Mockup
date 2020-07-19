@@ -22,7 +22,9 @@ public class ExecuteEnemyTurn : State
 
     IEnumerator ieEnter()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(.2f);
+        yield return character.CharacterSpine.ieAttack();
+        yield return new WaitForSeconds(.2f);
         //battleCtrl.ShowActionUI(character);
         battleCtrl.MoveTurnForward();
         battleCtrl.ExecuteTurn();
