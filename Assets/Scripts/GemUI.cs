@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum GemType { None, Red, Purple, Blue, Green }
-
 public class GemUI : MonoBehaviour
 {
     [SerializeField] Image image;
@@ -14,22 +12,22 @@ public class GemUI : MonoBehaviour
     public static Color32 blue = new Color32(73, 255, 230, 255);
     public static Color32 green = new Color32(167, 255, 73, 255);
 
-    public void Set(GemType type)
+    public void Set(Gem type)
     {
         Color c;
-        if(type == GemType.Red)
+        if(type == Gem.Red)
         {
             c = red;
         }
-        else if (type == GemType.Purple)
+        else if (type == Gem.Purple)
         {
             c = purple;
         }
-        else if (type == GemType.Blue)
+        else if (type == Gem.Blue)
         {
             c = blue;
         }
-        else if (type == GemType.Green)
+        else if (type == Gem.Green)
         {
             c = green;
         }

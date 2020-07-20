@@ -28,5 +28,10 @@ public class UnitStatsUI : MonoBehaviour
     {
         SetData(character.Data);
     }
+    
+    public void SetGem()
+    {
+
+    }
 
 }

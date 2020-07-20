@@ -6189,12 +6189,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afb3f9f11aef8b40a05193ca63cd8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive: 0
   text: {fileID: 751624078}
   gems:
   - {fileID: 1118835056}
   - {fileID: 461230712}
   - {fileID: 1099294727}
   - {fileID: 2141255074}
+  fake_gems: []
+  cacheData: 
 --- !u!1 &345838944
 GameObject:
   m_ObjectHideFlags: 0
@@ -27100,12 +27103,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afb3f9f11aef8b40a05193ca63cd8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive: 0
   text: {fileID: 36868400}
   gems:
   - {fileID: 1601508970}
   - {fileID: 959123901}
   - {fileID: 665915780}
   - {fileID: 382207090}
+  fake_gems: []
+  cacheData: 
 --- !u!1 &1583791110
 GameObject:
   m_ObjectHideFlags: 0
@@ -36412,12 +36418,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afb3f9f11aef8b40a05193ca63cd8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive: 0
   text: {fileID: 4115578779731463464}
   gems:
   - {fileID: 742429408}
   - {fileID: 494837103}
   - {fileID: 915153296}
   - {fileID: 1212055925}
+  fake_gems: []
+  cacheData: 
 --- !u!224 &370787138704410076
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36448,10 +36457,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 854575599}
     m_Modifications:
-    - target: {fileID: 1122952844, guid: 5fb66f2ea711fc2499baeb9af9ecb707, type: 3}
-      propertyPath: _animationName
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 1122952846, guid: 5fb66f2ea711fc2499baeb9af9ecb707, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -40178,10 +40183,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 854575599}
     m_Modifications:
-    - target: {fileID: 1711586365, guid: 8d851c06611e70d43bbac9262ce3b07a, type: 3}
-      propertyPath: _animationName
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 1711586367, guid: 8d851c06611e70d43bbac9262ce3b07a, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -40375,10 +40376,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 854575599}
     m_Modifications:
-    - target: {fileID: 1716259752, guid: e75495f8c4af23844b9b3e488475dbfa, type: 3}
-      propertyPath: _animationName
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 1716259754, guid: e75495f8c4af23844b9b3e488475dbfa, type: 3}
       propertyPath: m_Mesh
       value: 

@@ -51,11 +51,11 @@ public class CharacterStats
         data.attack = this.attack;
         data.defense = this.defense;
         data.speed = this.speed;
-        data.gems = new GemType[4] {
-            GemType.None,
-            GemType.None,
-            GemType.None,
-            GemType.None };
+        data.gems = new Gem[4] {
+            Gem.None,
+            Gem.None,
+            Gem.None,
+            Gem.None };
         data.isDead = this.isDead;
 
         return data;
@@ -82,7 +82,7 @@ public class UnitBattleData
     public int defense;
     public int speed;
 
-    public GemType[] gems;
+    public Gem[] gems;
     public int gemStack = 0;
     public string emote = "idle";
     public bool isDead;

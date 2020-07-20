@@ -184,6 +184,7 @@ public class BattleController : MonoBehaviour
             {
                 s += slot.Character.Data.Base.c_name +", ";
             }
+            slot.Character.GetActSkill(skill);
         }
 
         Debug.Log("[BattleCrtl]: ["+ owner.Data.Base.c_name +
@@ -205,6 +206,7 @@ public class BattleController : MonoBehaviour
             {
                 s += slot.Character.Data.Base.c_name + ", ";
             }
+
         }
 
         Debug.Log("[BattleCrtl]: [" + owner.Data.Base.c_name +
