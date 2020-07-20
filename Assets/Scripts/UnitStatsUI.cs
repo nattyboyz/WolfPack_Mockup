@@ -20,7 +20,7 @@ public class UnitStatsUI : MonoBehaviour
         hpUi.SetData(0, data.Battle.maxHp, data.Battle.hp);
         spUi.SetData(0, data.Battle.maxSp, data.Battle.sp);
         name_txt.text = data.Base.c_name;
-        diamondUI.SetGem(data.Battle.gems);
+        diamondUI.SetGems(data.Battle.gems);
         portrait_img.sprite = data.Portrait.Sprites[data.Battle.emote];
     }
 

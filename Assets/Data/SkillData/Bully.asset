@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Bully
   sp: 3
-  gems: 01000000010000000000000000000000
+  gems: 0100000001000000
   lore: ....
   description: Take rx2 damage

@@ -16,7 +16,7 @@ public class CharacterData : MonoBehaviour
     public PortraitData Portrait { get => portraitData; set => portraitData = value; }
     public CharacterStats Stats { get => stats; set => stats = value; }
 
-    public void Start()
+    public void InitBattleData()
     {
         Battle = stats.BattleData();
     }

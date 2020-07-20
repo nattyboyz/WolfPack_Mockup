@@ -28,6 +28,12 @@ public class BattleCharacter : MonoBehaviour
         overheadUI.gameObject.SetActive(false);
     }
 
+    public void Init()
+    {
+        Data.InitBattleData();
+        overheadUI.SetGems(Data.Battle.gems);
+    }
+
     public void Focus(bool active)
     {
         overheadUI.gameObject.SetActive(active);
@@ -37,19 +43,10 @@ public class BattleCharacter : MonoBehaviour
 
     public void GetActSkill(ActSkillData skillData) //Add onComplete
     {
-
-        TakeGemDamage(Gem.Green);
-        //for (int i = 0; i < skillData.Gems.Length; i++)
-        //{
-        //    for(int j =0;j < Data.Battle.gems.Length; j++)
-        //    {
-        //        //if (Data.Battle.gems[j] != skillData.Gems[i])
-        //        //{
-        //        //    Data.Battle.gems[j]
-        //        //}
-        //    }
-        //}
-       
+        for (int i = 0; i < skillData.Gems.Length; i++)
+        {
+            TakeGemDamage(skillData.Gems[i]);
+        }
     }
 
     public void TakeGemDamage(Gem gem)
@@ -62,6 +59,7 @@ public class BattleCharacter : MonoBehaviour
         {
             int idx = (start + i);
             if (idx > g.Length) idx -= g.Length;
+            Debug.Log("Set index " + idx + " to " + gem);
 
             if (g[idx] != gem)
             {
@@ -71,4 +69,6 @@ public class BattleCharacter : MonoBehaviour
             }
         }
     }
+
+
 }

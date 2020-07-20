@@ -30,6 +30,16 @@ public class BattleController : MonoBehaviour
 
         turnbaseState.AddState(new ExecuteEnemyTurn(this));
         turnbaseState.AddState(new ExecutePlayerTurn(this));
+
+        foreach (BattleCharacter ch in allies)
+        {
+            ch.Init();
+        }
+
+        foreach (BattleCharacter ch in enemies)
+        {
+            ch.Init();
+        }
     }
 
     public void SetCurrentCharacter(BattleCharacter character)
@@ -75,10 +85,10 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    void Start()
+    IEnumerator Start()
     {
         Init();
-        SortTurn();
+        yield return SortTurn();
     }
 
     private void Update()
@@ -86,18 +96,23 @@ public class BattleController : MonoBehaviour
         turnbaseState.Update(Time.deltaTime);
     }
 
-    void SortTurn()
+    IEnumerator SortTurn()
     {
         //Set turn depend by speed
         turns = new List<BattleCharacter>(allies);
         turns.AddRange(enemies);
-        IEnumerable<BattleCharacter> query = turns.OrderByDescending(turns => turns.Data.Battle.speed);
+        yield return new WaitForEndOfFrame();
+        IEnumerable<BattleCharacter> query = 
+            turns.OrderByDescending(turns => turns.Data.Battle.speed);
+
+       // Debug.Log(query)
+
         turns = query.ToList<BattleCharacter>();
         int i = 0;
         foreach (BattleCharacter c in query)
         {
             i++;
-           // Debug.Log(i + " " +c.Data.Base.c_name);
+            Debug.Log(i + " " +c.Data.Base.c_name);
         }
     }
 
@@ -194,6 +209,13 @@ public class BattleController : MonoBehaviour
         MoveTurnForward();
         ExecuteTurn();
     }
+
+
+    public void ProcessActSkill()
+    {
+
+    }
+
 
     public void ApplyBattleSkill(BattleCharacter owner,
       List<BattleCharacterSlot> targets,

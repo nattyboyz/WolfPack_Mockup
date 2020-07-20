@@ -19,7 +19,7 @@ public class DiamondUI : MonoBehaviour
         isActive = value;
     }
 
-    public void SetGem(Gem[] gemType)
+    public void SetGems(Gem[] gemType)
     {
        for(int i = 0; i < gemType.Length; i++)
         {

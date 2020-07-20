@@ -14,8 +14,13 @@ public class GemUI : MonoBehaviour
 
     public void Set(Gem type)
     {
+        image.color = GemColor(type);
+    }
+
+    public static Color32 GemColor(Gem type)
+    {
         Color c;
-        if(type == Gem.Red)
+        if (type == Gem.Red)
         {
             c = red;
         }
@@ -35,8 +40,7 @@ public class GemUI : MonoBehaviour
         {
             c = none;
         }
-
-        image.color = c;
+        return c;
     }
-    
+
 }

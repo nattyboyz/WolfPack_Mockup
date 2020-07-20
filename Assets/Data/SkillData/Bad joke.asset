@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Bad joke
   sp: 2
-  gems: 01000000000000000000000000000000
+  gems: 01000000
   lore: What!? not funny enough?
   description: Take rx1 damage

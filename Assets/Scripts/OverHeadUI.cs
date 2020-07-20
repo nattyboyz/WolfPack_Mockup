@@ -17,4 +17,9 @@ public class OverHeadUI : MonoBehaviour
         diamondUi.SetGem(slot, gemType);
     }
 
+    public void SetGems(Gem[] gemTypes)
+    {
+        diamondUi.SetGems(gemTypes);
+    }
+
 }
