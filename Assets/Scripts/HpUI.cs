@@ -12,9 +12,9 @@ public class HpUI : FillUI
         hpBar.fillAmount = GetPecent(current);
     }
 
-    public override void SetData(float min, float max, float cur)
+    public override void Set(float min, float max, float cur)
     {
-        base.SetData(min, max, cur);
+        base.Set(min, max, cur);
         hpBar.fillAmount = GetPecent(current);
     }
 

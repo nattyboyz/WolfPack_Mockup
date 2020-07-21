@@ -17,8 +17,8 @@ public class UnitStatsUI : MonoBehaviour
 
     public void SetData(CharacterData data)
     {
-        hpUi.SetData(0, data.Battle.maxHp, data.Battle.hp);
-        spUi.SetData(0, data.Battle.maxSp, data.Battle.sp);
+        hpUi.Set(0, data.Battle.maxHp, data.Battle.hp);
+        spUi.Set(0, data.Battle.maxSp, data.Battle.sp);
         name_txt.text = data.Base.c_name;
         diamondUI.SetGems(data.Battle.gems);
         portrait_img.sprite = data.Portrait.Sprites[data.Battle.emote];
@@ -29,9 +29,26 @@ public class UnitStatsUI : MonoBehaviour
         SetData(character.Data);
     }
     
-    public void SetGem()
+    public void SetGem(int slot, Gem gem)
     {
 
     }
+
+    public void SetGems(int[] slots, Gem gems)
+    {
+
+    }
+
+    public void SetHp(float hp)
+    {
+        
+    }
+
+
+    public void SetSp(float sp)
+    {
+
+    }
+
 
 }

@@ -9,7 +9,7 @@ public class FillUI : MonoBehaviour
     public float current;
     //public Action onFinish = null;
 
-    public virtual void SetData(float min, float max, float cur)
+    public virtual void Set(float min, float max, float cur)
     {
         _default.min = min;
         _default.max = max;

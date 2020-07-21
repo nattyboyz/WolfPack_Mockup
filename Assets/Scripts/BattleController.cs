@@ -211,8 +211,13 @@ public class BattleController : MonoBehaviour
     }
 
 
-    public void ProcessActSkill()
+    public void ProcessActSkill(BattleCharacter owner,
+        List<BattleCharacterSlot> targets,
+        ActSkillData skill)
     {
+
+
+
 
     }
 
