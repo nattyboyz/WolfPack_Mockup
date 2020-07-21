@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 8387552763435611774}
   - component: {fileID: 3762109558688758246}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Mask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -409,11 +409,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81abb9d3dbd5e4c4f961a5ef58d4edff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bar: {fileID: 8387552764860449997}
   _default:
     min: 0
     max: 100
   current: 50
-  hpBar: {fileID: 8387552764860449997}
 --- !u!1 &8387552764526561009
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 8387552764860449994}
   - component: {fileID: 8387552764860449997}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1663,11 +1663,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e967f20c9f42973429f2ace6d86f55d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bar: {fileID: 4916122224134060243}
   _default:
     min: 0
     max: 122
   current: 52
-  spBar: {fileID: 4916122224134060243}
 --- !u!114 &6970937796991107093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2006,11 +2006,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81abb9d3dbd5e4c4f961a5ef58d4edff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bar: {fileID: 4916122225075836522}
   _default:
     min: 0
     max: 100
   current: 70
-  hpBar: {fileID: 4916122225075836522}
 --- !u!1 &4916122225075836520
 GameObject:
   m_ObjectHideFlags: 0
@@ -2229,12 +2229,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afb3f9f11aef8b40a05193ca63cd8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive: 0
   text: {fileID: 4115578780583926030}
   gems:
   - {fileID: 1374201748727640810}
   - {fileID: 1186010154573584119}
   - {fileID: 4558217551406623774}
   - {fileID: 4758635180342126699}
+  fake_gems: []
+  cacheData: 
 --- !u!1 &8460654099849308129
 GameObject:
   m_ObjectHideFlags: 0

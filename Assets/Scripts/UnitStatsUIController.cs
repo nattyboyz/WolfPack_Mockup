@@ -34,4 +34,31 @@ public class UnitStatsUIController : MonoBehaviour
         }
     }
 
+    public void AddGem(Side side,int slot, Gem gemType)
+    {
+        UnitStatsUI ui;
+    }
+
+    public void RemoveGem(Side side,int slot)
+    {
+        UnitStatsUI ui;
+    }
+
+    public void DiamondBreak(Side side,Gem gemType)
+    {
+        UnitStatsUI ui;
+    }
+
+    public void SetHp(Side side,float hp)
+    {
+        UnitStatsUI ui;
+    }
+
+    public void SetSp(Side side, float sp)
+    {
+        UnitStatsUI ui;
+        
+
+    }
+
 }

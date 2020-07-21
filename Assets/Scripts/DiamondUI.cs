@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class DiamondUI : MonoBehaviour
 {
-    //[SerializeField] int amount;
     [SerializeField] protected bool isActive = false;
     [SerializeField] protected TextMeshProUGUI text;
     [SerializeField] protected GemUI[] gems;
     [SerializeField] protected GemUI[] fake_gems;
-    //Gem[] gemData;
     [SerializeField] Gem[] cacheData;
+
+    public Action onSubmit;
 
     public void Active(bool value)
     {
@@ -69,8 +70,6 @@ public class DiamondUI : MonoBehaviour
         }
     }
 
-
-
     public void PreviewUp()
     {
         if(cacheData.Length >2)//3Gems
@@ -86,6 +85,7 @@ public class DiamondUI : MonoBehaviour
             PreviewGems(0, cacheData);
         }
     }
+
     public void PreviewDown()
     {
         if (cacheData.Length > 2)//3Gems
@@ -96,6 +96,7 @@ public class DiamondUI : MonoBehaviour
             PreviewGems(0, cacheData);
         }
     }
+
     public void PreviewLeft()
     {
         if (cacheData.Length > 2)//3Gems
@@ -107,6 +108,7 @@ public class DiamondUI : MonoBehaviour
             PreviewGems(0, cacheData);
         }
     }
+
     public void PreviewRight()
     {
         if (cacheData.Length > 2)//3Gems
@@ -146,6 +148,7 @@ public class DiamondUI : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log("Space");
+                onSubmit?.Invoke();
                 Active(false);
             }
         }

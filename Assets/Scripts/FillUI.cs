@@ -2,21 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class FillUI : MonoBehaviour
 {
+    [SerializeField] protected Image bar;
     public MinMax _default;
     public float current;
-    //public Action onFinish = null;
 
-    public virtual void Set(float min, float max, float cur)
+    protected virtual void Start()
+    {
+        bar.fillAmount = GetPecent(current);
+    }
+
+    public virtual void Init(float min, float max, float cur)
     {
         _default.min = min;
         _default.max = max;
         current = cur;
+        bar.fillAmount = GetPecent(current);
     }
 
-     public virtual void Modify(float value)
+    public virtual void Modify(float value)
     {
         if (current + value <= _default.min)
         {
@@ -30,13 +37,29 @@ public class FillUI : MonoBehaviour
         {
             current += value;
         }
+
+        bar.fillAmount = GetPecent(current);
     }
 
-    public float GetPecent(float value)
+    public virtual float GetPecent(float value)
     {
-        return  value/_default.max;
+        return value / _default.max;
     }
 
+    public virtual void SetMax(float value)
+    {
+        _default.max = value;
+    }
+
+    public virtual void SetMin(float value)
+    {
+        _default.min = value;
+    }
+
+    public virtual void SetValue(float value)
+    {
+        Modify(value - current);
+    }
 }
 
 [Serializable]
