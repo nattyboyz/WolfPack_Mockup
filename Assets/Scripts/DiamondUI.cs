@@ -4,21 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using DG.Tweening;
 
 public class DiamondUI : MonoBehaviour
 {
-    [SerializeField] protected bool isActive = false;
     [SerializeField] protected TextMeshProUGUI text;
     [SerializeField] protected GemUI[] gems;
-    [SerializeField] protected GemUI[] fake_gems;
-    [SerializeField] Gem[] cacheData;
+    [SerializeField] protected GemUI[] animationGems;
 
-    public Action onSubmit;
 
-    public void Active(bool value)
-    {
-        isActive = value;
-    }
+    public GemUI[] Gems { get => gems; set => gems = value; }
 
     public void SetGems(Gem[] gemType)
     {
@@ -38,120 +33,66 @@ public class DiamondUI : MonoBehaviour
         text.text = amount.ToString();
     }
 
-    public void PreviewGems(int start, Gem[] gemsData)
+    //Set gem with animation@!
+    public IEnumerator ieSetGems(Dictionary<int, Gem> gemSlots)
     {
-        int idx = 0;
-        HidePreviewGems();
-
-        for (int i = 0; i < gemsData.Length; i++)
+        List<int> ind = new List<int>();
+        foreach (KeyValuePair<int, Gem> kvp in gemSlots)
         {
-            if (start + i > gems.Length - 1) idx = (start + i) - gems.Length;
-            else idx = start + i ;
-
-            //gems[idx].Set(gemsData[i]);
-            SetPreviewGem(idx, gemsData[i]);
-            Debug.Log(gems[idx] + " : to " + gemsData[i]);
+            GemUI gemUI = animationGems[kvp.Key];
+            gemUI.Set(kvp.Value);
+            gemUI.gameObject.SetActive(true);
+            gemUI.transform.position = 
+                new Vector3(gems[kvp.Key].transform.position.x,
+                gems[kvp.Key].transform.position.y + 1,
+                gems[kvp.Key].transform.position.z);
+            gemUI.transform.DOMoveY(gems[kvp.Key].transform.position.y,0.2f);
+            ind.Add(kvp.Key);
         }
 
-    }
+        yield return new WaitForSeconds(0.2f);
+        yield return ieGemBreak(ind);
 
-    public void SetPreviewGem(int index, Gem gemType)
-    {
-        fake_gems[index].transform.position = gems[index].transform.position;
-        fake_gems[index].Set(gemType);
-        fake_gems[index].gameObject.SetActive(true);
-    }
-
-    public void HidePreviewGems()
-    {
-        for(int i = 0; i < fake_gems.Length; i++)
+        foreach (KeyValuePair<int, Gem> kvp in gemSlots)
         {
-            fake_gems[i].gameObject.SetActive(false);
+            SetGem(kvp.Key, kvp.Value);
+            animationGems[kvp.Key].gameObject.SetActive(false);
         }
     }
 
-    public void PreviewUp()
+    public IEnumerator ieGemBreak(List<int> indices)
     {
-        if(cacheData.Length >2)//3Gems
+        yield return null;
+        for(int i =0;i< indices.Count; i++)
         {
-            PreviewGems(3, cacheData);
+            gems[indices[i]].Break();
         }
-        else if (cacheData.Length > 1)//2Gems
-        {
-            PreviewGems(0, cacheData);
-        }
-        else if (cacheData.Length > 0)//1Gem
-        {
-            PreviewGems(0, cacheData);
-        }
+        yield return new WaitForSeconds(0.3f);
+        Debug.Log("Break");
+        
     }
 
-    public void PreviewDown()
+    public IEnumerator ieSetGemsBreak(Dictionary<int, Gem> gemSlots)
     {
-        if (cacheData.Length > 2)//3Gems
-        {
-            PreviewGems(1, cacheData);
-        }
-        else { 
-            PreviewGems(0, cacheData);
-        }
+        yield return ieSetGems(gemSlots);
+        //yield return
+        
     }
 
-    public void PreviewLeft()
+    public static int GetEmptySlot(Gem[] gems)
     {
-        if (cacheData.Length > 2)//3Gems
+        for(int i = 0; i < gems.Length; i++)
         {
-            PreviewGems(2, cacheData);
+            if (gems[i] == Gem.None) return i;
         }
-        else
-        {
-            PreviewGems(0, cacheData);
-        }
+        return -1;
     }
-
-    public void PreviewRight()
+    public static int GetExcludeSlot(Gem[] gems, Gem excludedGem)
     {
-        if (cacheData.Length > 2)//3Gems
+        for (int i = 0; i < gems.Length; i++)
         {
-            PreviewGems(0, cacheData);
+            if (gems[i] != excludedGem) return i;
         }
-        else
-        {
-            PreviewGems(0, cacheData);
-        }
+        return -1;
     }
-
-    public void Update()
-    {
-        if (isActive)
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                Debug.Log("Up");
-                PreviewUp();
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                Debug.Log("Down");
-                PreviewDown();
-            }
-            else if (Input.GetKeyDown(KeyCode.A))
-            {
-                Debug.Log("Left");
-                PreviewLeft();
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                Debug.Log("Right");
-                PreviewRight();
-            }
-            else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Debug.Log("Space");
-                onSubmit?.Invoke();
-                Active(false);
-            }
-        }
-    }
-    
 }

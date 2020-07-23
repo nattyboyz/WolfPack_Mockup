@@ -26,7 +26,7 @@ public class BattleController : MonoBehaviour
     public void Init()
     {
         turnbaseState = new StateMachine();
-        unitSelection.InitSelection();
+        //unitSelection.InitSelection();
 
         turnbaseState.AddState(new ExecuteEnemyTurn(this));
         turnbaseState.AddState(new ExecutePlayerTurn(this));
@@ -141,9 +141,6 @@ public class BattleController : MonoBehaviour
             attackUI.Active(true);
         };
 
-
-
-
         attackUI.onExit = () =>
         {
             attackUI.Active(false);
@@ -187,40 +184,67 @@ public class BattleController : MonoBehaviour
         if (currentTurn >= turns.Count) currentTurn = 0;
     }
 
+    BattleCharacter owner;
+    List<BattleCharacterSlot> targets;
+    ActSkillData skill;
+
     public void ApplyActSkill(BattleCharacter owner,
         List<BattleCharacterSlot> targets,
         ActSkillData skill
         )
     {
         string s = "";
+        this.owner = owner;
+        this.targets = targets;
+        this.skill = skill;
+
         foreach (BattleCharacterSlot slot in targets)
         {
             if (slot.Character != null)
             {
                 s += slot.Character.Data.Base.c_name +", ";
             }
-            slot.Character.GetActSkill(skill);
+            slot.Character.OverheadUI.Active(true);
+            slot.Character.OverheadUI.ChooseGemSlot(skill.Gems, OnSubmitGemSlot, OnCancelGemSelection);
         }
 
         Debug.Log("[BattleCrtl]: ["+ owner.Data.Base.c_name +
             "] apply skill <b>[" + 
             skill.SkillName+ "]</b> to " + s);
+    }
 
+    void OnCancelGemSelection()
+    {
+        foreach (BattleCharacterSlot slot in targets)
+        {
+            slot.Character.OverheadUI.Active(false);
+        }
+        unitSelection.Active(TargetMode.Single, owner.Data.Battle.ui_lastTarget);
+    }
+
+    void OnSubmitGemSlot(Dictionary<int, Gem> gemSlots)
+    {
+        StartCoroutine(ieExecuteActSkill(owner,targets,skill,gemSlots));
+    }
+
+    IEnumerator ieExecuteActSkill(BattleCharacter owner,
+        List<BattleCharacterSlot> targets,
+        ActSkillData skill, Dictionary<int,Gem> gemSlots)
+    {
+        yield return new WaitForSeconds(0.2f);
+        yield return owner.CharacterSpine.ieAttack();
+        foreach (BattleCharacterSlot slot in targets)
+        {
+           yield return slot.Character.ieTakeGemDamage(gemSlots);
+        }
+        yield return new WaitForSeconds(0.2f);
         MoveTurnForward();
         ExecuteTurn();
+        foreach (BattleCharacterSlot slot in targets)
+        {
+            slot.Character.OverheadUI.Active(false);
+        }
     }
-
-
-    public void ProcessActSkill(BattleCharacter owner,
-        List<BattleCharacterSlot> targets,
-        ActSkillData skill)
-    {
-        // unitStatsUI.
-
-
-
-    }
-
 
     public void ApplyBattleSkill(BattleCharacter owner,
       List<BattleCharacterSlot> targets,

@@ -37,6 +37,7 @@ public class CharacterSpine : MonoBehaviour
         }
         else
         {
+
             yield break;
         }
     }

@@ -18,27 +18,20 @@ public class UnitSelection : MonoBehaviour
     int selected_index = 0;
     int currentTeam = 0;
 
-
     [SerializeField] GameObject highlight;
-    public Action<List<BattleCharacterSlot>> onSelect;
+    public Action<List<BattleCharacterSlot>, int> onSelect;
     public Action<List<BattleCharacterSlot>> onSubmit;
-    public Action onCancel;
+    public Action onExit;
 
     TargetMode mode;
 
-    public void InitSelection()
+    public void Active(TargetMode mode, int startValue)
     {
-       //allSlot = new List<BattleCharacterSlot>(allySlots);
-        //allSlot.AddRange(enemySlots);//Add all posible slot into account
+        //Debug.Log("ActiveUnitSelection");
+        StartCoroutine(ieActive(mode, startValue));
     }
 
-    public void ActiveUnitSelection(TargetMode mode, int startValue)
-    {
-        Debug.Log("ActiveUnitSelection");
-        StartCoroutine(ieActiveUnitSelection(mode, startValue));
-    }
-
-    IEnumerator ieActiveUnitSelection(TargetMode mode, int startValue)
+    IEnumerator ieActive(TargetMode mode, int startValue)
     {
         //Set default
         if (mode == TargetMode.Single)
@@ -63,13 +56,12 @@ public class UnitSelection : MonoBehaviour
 
     public void Submit()
     {
-        onSubmit?.Invoke(selected_slots);
         Deselect(selected_slots);
         activeSelectTarget = false;
-
+        onSubmit?.Invoke(selected_slots);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (activeSelectTarget)
         {
@@ -87,17 +79,22 @@ public class UnitSelection : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Space))
             {
                 Submit();
-                //Deselect(selected_slots);
-                //activeSelectTarget = false;
             }
             else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape))
             {
-                onCancel?.Invoke();
+                activeSelectTarget = false;
                 Deselect(selected_slots);
                 selected_slots.Clear();
-                activeSelectTarget = false;
+                //onExit?.Invoke();
+                StartCoroutine(ieExit());
             }
         }
+    }
+
+    public IEnumerator ieExit()
+    {
+        yield return new WaitForSeconds(0.2f);
+        onExit?.Invoke();
     }
 
     //-1 +1
@@ -124,9 +121,11 @@ public class UnitSelection : MonoBehaviour
         } while (character == null || character.Data.Battle.isDead);
 
         Deselect(new List<BattleCharacterSlot>() { allSlot[selected_index] });
+
+        selected_index = target;
         Select(new List<BattleCharacterSlot>() { allSlot[target] });
 
-        selected_index = target; 
+    
         //Debug.Log("Select " + character.Data.Base.c_name);
     }
 
@@ -149,16 +148,12 @@ public class UnitSelection : MonoBehaviour
         }
     }
 
-    public void SelectAll()
-    {
-
-
-    }
-
     public void Select(List<BattleCharacterSlot> slots/*, rule*/)
     {
         selected_slots.Clear();
-        onSelect?.Invoke(slots);
+        onSelect?.Invoke(slots, selected_index);
+        //else onSelect?.Invoke(slots, selected_index);
+
         foreach (BattleCharacterSlot slot in slots)
         {
             if (slot.Character != null)

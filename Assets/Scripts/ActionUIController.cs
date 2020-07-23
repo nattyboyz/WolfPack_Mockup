@@ -21,6 +21,7 @@ public class ActionUIController : MonoBehaviour
 
     public void Show(Vector3 pos)
     {
+        Debug.Log("Show");
         main_canvas.transform.position = pos;
         main_canvas.enabled = true;
         start_selector.Select();

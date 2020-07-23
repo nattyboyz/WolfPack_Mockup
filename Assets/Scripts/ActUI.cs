@@ -9,6 +9,9 @@ public class ActUI : ListoUI
     [SerializeField] protected UnitStatsUIController unitStatsUI;
     [SerializeField] protected ActSkillData[] skills;
 
+    [SerializeField] BattleCharacter owner;
+    [SerializeField] BattleController battleCtrl;
+
     protected override void Start()
     {
         Active(false);
@@ -16,8 +19,12 @@ public class ActUI : ListoUI
 
     public void Init(BattleCharacter character, BattleController battleCtrl)
     {
-        transform.position = new Vector3(character.transform.position.x, character.transform.position.y +4.5f, character.transform.position.z);
-        skills = character.Data.Stats.actSkills;
+        this.owner = character;
+        this.battleCtrl = battleCtrl;
+        this.skills = owner.Data.Stats.actSkills;
+
+        transform.position = new Vector3(owner.transform.position.x, owner.transform.position.y +4.5f, owner.transform.position.z);
+
         ActButton btn;
         ActSkillData data;
 
@@ -37,7 +44,7 @@ public class ActUI : ListoUI
             btn.value = i.ToString();
             btn.onClick = (value) =>
                 {
-                    unitSelection.onCancel = () =>
+                    unitSelection.onExit = () =>
                     {
                         Active(true);
                     };
@@ -46,17 +53,25 @@ public class ActUI : ListoUI
                         int idx;
                         if (int.TryParse(value, out idx))
                         {
-                            battleCtrl.ApplyActSkill(character,
+                            owner.Data.Battle.ui_lastAct = idx;
+                            this.battleCtrl.ApplyActSkill(owner,
                                 slots,
-                                character.Data.Stats.actSkills[idx]);
+                                skills[idx]);
                         }
                     };
-                    unitSelection.onSelect = (slots) =>
+                    unitSelection.onSelect = (slots, idx) =>
                     {
-                        unitStatsUI.Show(slots[0].Character.Data, UnitStatsUIController.Side.Right);
+                        foreach (BattleCharacterSlot slot in slots)
+                        {
+                            slot.Character.OverheadUI.Active(true);
+                            unitStatsUI.Show(slot.Character.Data, UnitStatsUIController.Side.Right);
+                        }
+
+                        owner.Data.Battle.ui_lastTarget = idx;
+                        Debug.Log(owner.Data.Battle.ui_lastTarget);
                     };
 
-                    unitSelection.ActiveUnitSelection(TargetMode.Single, 3);
+                    unitSelection.Active(TargetMode.Single, owner.Data.Battle.ui_lastTarget);
                     Active(false);
                     //Debug.Log("Click button");
                 };
@@ -64,25 +79,13 @@ public class ActUI : ListoUI
         }
     }
 
-    //public void OnSelectButton(ActButton button)
-    //{
-    //    button.transform.localPosition = new Vector3(27f,
-    //   button.transform.localPosition.y +10f,
-    //  button.transform.localPosition.z);
-    //}
-
-    //public void OnDeselectButton(ActButton button)
-    //{
-    //    button.transform.localPosition = new Vector3(8.5f,
-    //                button.transform.localPosition.y -10f,
-    //                button.transform.localPosition.z);
-    //}
-
     public override void Active(bool active)
     {
         base.Active(active);
+
         if (active)
         {
+            Select(owner.Data.Battle.ui_lastAct);
             foreach(ListoButton b in buttons)
             {
                 ActButton btn = b as ActButton;
@@ -99,6 +102,7 @@ public class ActUI : ListoUI
                 ActButton btn = b as ActButton;
                 btn.allowSubmit = false;
             }
+            page = 0;
         }
         main_canvas.enabled = active;
     }
@@ -107,13 +111,13 @@ public class ActUI : ListoUI
     {
         int target = page;
         int maxP = Mathf.FloorToInt((float)skills.Length / (float)button_per_page);
-        //Debug.Log("Max page " + maxP);
+        Debug.Log("Max page " + maxP);
 
         if (target + mod < 0) target = maxP;
         else if (target + mod > maxP) target = 0;
         else target += mod;
 
-        //Debug.Log("target " + target);
+        Debug.Log("target " + target);
 
         int start = button_per_page * target;
         int c = skills.Length;
@@ -137,7 +141,34 @@ public class ActUI : ListoUI
         page = target;
     }
 
-    public void Set(ActButton btn, ActSkillData skillData)
+    public override void Page(int page)
+    {
+        int maxP = Mathf.FloorToInt((float)skills.Length / (float)button_per_page);
+        this.page = page;
+        ActButton btn;
+        int start = button_per_page * page;
+        for (int i = 0; i < button_per_page; i++)
+        {
+            btn = buttons[i] as ActButton;
+            if (i + start < skills.Length)
+            {
+                Set(btn, skills[i + start]);
+                btn.value = (i + start).ToString();
+            }
+            else
+            {
+                buttons[i].Hide();
+            }
+        }
+    }
+
+    public override void Select(int index)
+    {
+        base.Select(index);
+        owner.Data.Battle.ui_lastAct = index;
+    }
+
+    void Set(ActButton btn, ActSkillData skillData)
     {
         if (skillData == null)
         {
@@ -151,6 +182,5 @@ public class ActUI : ListoUI
             btn.interactable = true;
             btn.Main_img.gameObject.SetActive(true);
         }
-
     }
 }

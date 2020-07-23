@@ -530,6 +530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpUi: {fileID: 9125862155064108339}
   diamondUi: {fileID: 3066989885315958789}
+  diamondSelection: {fileID: 6749078127285385457}
 --- !u!1 &8387552764860449999
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,5 +820,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8afb3f9f11aef8b40a05193ca63cd8f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6749078127285385457 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7916845603620578619, guid: 05371dce60a88cd428126cf42b495ec8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3492475462672637386}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e55ddf122bb0b4ca1536c3c3498eaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

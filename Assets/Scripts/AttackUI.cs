@@ -9,6 +9,9 @@ public class AttackUI : ListoUI
     [SerializeField] protected UnitStatsUIController unitStatsUI;
     [SerializeField] protected BattleSkillData[] skills;
 
+    [SerializeField] BattleCharacter owner;
+    [SerializeField] BattleController battleCtrl;
+
     protected override void Start()
     {
         Active(false);
@@ -16,8 +19,12 @@ public class AttackUI : ListoUI
 
     public void Init(BattleCharacter character, BattleController battleCtrl)
     {
-        transform.position = new Vector3(character.transform.position.x, character.transform.position.y + 4.5f, character.transform.position.z);
-        skills = character.Data.Stats.battleSkills;
+        this.owner = character;
+        this.battleCtrl = battleCtrl;
+        this.skills = owner.Data.Stats.battleSkills;
+
+        transform.position = new Vector3(owner.transform.position.x, owner.transform.position.y + 4.5f, owner.transform.position.z);
+
         ActButton btn;
         BattleSkillData data;
 
@@ -38,7 +45,7 @@ public class AttackUI : ListoUI
             btn.value = i.ToString();
             btn.onClick = (value) =>
             {
-                unitSelection.onCancel = () =>
+                unitSelection.onExit = () =>
                 {
                     Active(true);
                 };
@@ -47,17 +54,23 @@ public class AttackUI : ListoUI
                     int idx;
                     if (int.TryParse(value, out idx))
                     {
-                        battleCtrl.ApplyBattleSkill(character,
+                        owner.Data.Battle.ui_lastAttack = idx;
+                        battleCtrl.ApplyBattleSkill(owner,
                             slots,
-                            character.Data.Stats.battleSkills[idx]);
+                            skills[idx]);
                     }
                 };
-                unitSelection.onSelect = (slots) =>
+                unitSelection.onSelect = (slots, idx) =>
                 {
-                    unitStatsUI.Show(slots[0].Character.Data, UnitStatsUIController.Side.Right);
+                    foreach (BattleCharacterSlot slot in slots)
+                    {
+                        slot.Character.OverheadUI.Active(true);
+                        unitStatsUI.Show(slot.Character.Data, UnitStatsUIController.Side.Right);
+                    };
+                    owner.Data.Battle.ui_lastTarget = idx;
                 };
 
-                unitSelection.ActiveUnitSelection(TargetMode.Single, 3);
+                unitSelection.Active(TargetMode.Single, owner.Data.Battle.ui_lastTarget);
                 Active(false);
             };
 
@@ -67,8 +80,10 @@ public class AttackUI : ListoUI
     public override void Active(bool active)
     {
         base.Active(active);
+
         if (active)
         {
+            Select(owner.Data.Battle.ui_lastAttack);
             foreach (ListoButton b in buttons)
             {
                 ActButton btn = b as ActButton;
@@ -123,7 +138,13 @@ public class AttackUI : ListoUI
         page = target;
     }
 
-    public void Set(ActButton btn, BattleSkillData skillData)
+    public override void Select(int index)
+    {
+        base.Select(index);
+        owner.Data.Battle.ui_lastAct = index;
+    }
+
+    void Set(ActButton btn, BattleSkillData skillData)
     {
         if (skillData == null)
         {

@@ -25,7 +25,7 @@ public class BattleCharacter : MonoBehaviour
 
     private void Awake()
     {
-        overheadUI.gameObject.SetActive(false);
+        overheadUI.Active(false);
     }
 
     public void Init()
@@ -36,17 +36,9 @@ public class BattleCharacter : MonoBehaviour
 
     public void Focus(bool active)
     {
-        overheadUI.gameObject.SetActive(active);
+        overheadUI.Active(active);
         if (active) graphic.transform.localScale = new Vector3(1.1f, 1.1f, 1f);
         else graphic.transform.localScale = new Vector3(1f, 1f, 1f);
-    }
-
-    public void GetActSkill(ActSkillData skillData) //Add onComplete
-    {
-        for (int i = 0; i < skillData.Gems.Length; i++)
-        {
-            TakeGemDamage(skillData.Gems[i]);
-        }
     }
 
     public void TakeGemDamage(Gem gem)
@@ -70,5 +62,13 @@ public class BattleCharacter : MonoBehaviour
         }
     }
 
-
+    public IEnumerator ieTakeGemDamage(Dictionary<int,Gem> gemSlots)
+    {
+        foreach(KeyValuePair<int,Gem> kvp in gemSlots)
+        {
+            Data.Battle.gems[kvp.Key] = kvp.Value;
+            //overheadUI.SetGem(kvp.Key, kvp.Value);
+        }
+        yield return overheadUI.DiamondUi.ieSetGems(gemSlots);
+    }
 }

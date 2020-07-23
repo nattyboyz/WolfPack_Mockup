@@ -59,7 +59,6 @@ public class CharacterStats
         data.isDead = this.isDead;
 
         return data;
-
     }
 
 }
@@ -87,15 +86,14 @@ public class UnitBattleData
     public string emote = "idle";
     public bool isDead;
 
-    public int target_slot = 0;
+    //UI cache data 
+    public int ui_lastAction = 0;
+    public int ui_lastTarget = 0;
+    public int ui_lastAct = 0;
+    public int ui_lastAttack = 0;
 
-    public void ModifyHp()
-    {
-      
-    }
 
-    public void ModifySp()
-    {
 
-    }
+
+
 }

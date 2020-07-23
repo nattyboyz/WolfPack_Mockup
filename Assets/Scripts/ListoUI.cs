@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-
 public class ListoUI : MonoBehaviour
 {
     [SerializeField] protected bool isActive = false;
@@ -15,15 +14,13 @@ public class ListoUI : MonoBehaviour
     [Min(1)][SerializeField] protected int button_per_page = 4;
     [SerializeField] protected int selected_index = 0;
     [SerializeField] protected int page = 0;
-    [SerializeField] protected int maxPage = 2;
+    //[SerializeField] protected int maxPage = 2;
 
     [SerializeField] protected List<ListoButton> buttons = new List<ListoButton>();
     [SerializeField] List<string> stringList;
 
     public Action onExit;
-    public Action onBack;
    
-
     protected virtual void Start()
     {
 
@@ -34,7 +31,7 @@ public class ListoUI : MonoBehaviour
         isActive = active;
     }
 
-    public virtual void Update()
+    public virtual void LateUpdate()
     {
         if (!isActive) return;
 
@@ -60,10 +57,16 @@ public class ListoUI : MonoBehaviour
         }
     }
 
+    public IEnumerator ieExit()
+    {
+        yield return new WaitForSeconds(0.2f);
+        onExit?.Invoke();
+    }
+
     public virtual void TargetShift(int mod)
     {
-        int target = selected_index;
-        if (selected_index < 0) target = selected_index = 0;
+        int idx = selected_index;
+        if (selected_index < 0) idx = selected_index = 0;
 
         ListoButton btn = null;
         int time = 0;
@@ -73,16 +76,15 @@ public class ListoUI : MonoBehaviour
             {
                 return;
             }
-            if (target + mod >= buttons.Count) target = 0;
-            else if (target + mod < 0) target = buttons.Count - 1;
-            else target += mod;
-            btn = buttons[target];
+            if (idx + mod >= buttons.Count) idx = 0;
+            else if (idx + mod < 0) idx = buttons.Count - 1;
+            else idx += mod;
+            btn = buttons[idx];
             time++;
 
         } while (btn == null || !btn.interactable);
 
-        buttons[target].Select();
-        selected_index = target;
+        Select(idx);
         //Debug.Log("Select " + character.Data.Base.c_name);
     }
 
@@ -112,15 +114,49 @@ public class ListoUI : MonoBehaviour
                 buttons[i].Hide();
             }
         }
-
         page = target;
+    }
 
+    public virtual void Page(int page)
+    {
+        int maxP = Mathf.FloorToInt((float)stringList.Count / (float)button_per_page);
+        this.page = page;
+        for (int i = 0; i < button_per_page; i++)
+        {
+            if (i + (button_per_page * page) < stringList.Count)
+            {
+                buttons[i].Set(stringList[i + (button_per_page * page)]);
+            }
+            else
+            {
+                buttons[i].Hide();
+            }
+        }
     }
 
     public virtual void Init(List<string> stringList)
     {
         this.stringList = stringList;
     }
+
+    public virtual void Select(int index)
+    {
+        Debug.Log(index);
+        if(index >= buttons.Count)
+        {
+            Debug.Log(index + "/" + buttons.Count);
+            page = (int)index/(int)buttons.Count;
+            index = (index % buttons.Count);
+        }
+        //Open if want to set 
+        Debug.Log("Page " + page);
+        if (page > 0) Page(page);
+
+        Debug.Log("Try to select " + index + ":Page " + page) ;
+        buttons[index].Select();
+        selected_index = index;
+    }
+
 
 
 }

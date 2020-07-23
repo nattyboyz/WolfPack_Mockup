@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class GemUI : MonoBehaviour
 {
     [SerializeField] Image image;
+    [SerializeField] ParticleSystem breakParticle;
+
     public static Color32 none = new Color32(29,29,29,255);
     public static Color32 red = new Color32(255, 64, 131, 255);
     public static Color32 purple = new Color32(176, 81, 255, 255);
@@ -15,6 +17,11 @@ public class GemUI : MonoBehaviour
     public void Set(Gem type)
     {
         image.color = GemColor(type);
+    }
+
+    public void Break()
+    {
+        breakParticle.Play();
     }
 
     public static Color32 GemColor(Gem type)

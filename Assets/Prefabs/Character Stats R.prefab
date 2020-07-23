@@ -2057,15 +2057,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afb3f9f11aef8b40a05193ca63cd8f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
   text: {fileID: 8185536154067235350}
   gems:
-  - {fileID: 6599886641093794290}
   - {fileID: 6408667524505877999}
   - {fileID: 8631058995967592198}
   - {fileID: 761026564763960179}
-  fake_gems: []
-  cacheData: 
+  - {fileID: 6599886641093794290}
 --- !u!1 &4463046103081946361
 GameObject:
   m_ObjectHideFlags: 0
