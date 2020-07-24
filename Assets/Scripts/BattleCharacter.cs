@@ -37,8 +37,16 @@ public class BattleCharacter : MonoBehaviour
     public void Focus(bool active)
     {
         overheadUI.Active(active);
-        if (active) graphic.transform.localScale = new Vector3(1.1f, 1.1f, 1f);
-        else graphic.transform.localScale = new Vector3(1f, 1f, 1f);
+        float sign = Mathf.Sign(graphic.transform.localScale.x);
+        if (active)
+        {
+          
+            graphic.transform.localScale = new Vector3(graphic.transform.localScale.x + (sign*0.1f), graphic.transform.localScale.y +  0.1f, 1f);
+        }
+        else
+        {
+            graphic.transform.localScale = new Vector3(graphic.transform.localScale.x - (sign * 0.1f), graphic.transform.localScale.y -  0.1f, 1f);
+        }
     }
 
     public void TakeGemDamage(Gem gem)

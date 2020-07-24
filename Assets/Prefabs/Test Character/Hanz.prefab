@@ -76,7 +76,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5012090044206403886}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.25, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.30000004, z: 1}
   m_Children: []
   m_Father: {fileID: 5767491160843942446}
@@ -231,7 +231,7 @@ MonoBehaviour:
   type: 0
   id: 
   characterData: {fileID: 5012090045690629068}
-  graphic: {fileID: 5012090045690629070}
+  graphic: {fileID: 1728187886167076862}
   characterSpine: {fileID: 838511727}
   overheadUI: {fileID: 6070827336164080866}
 --- !u!114 &5012090045690629068
@@ -473,6 +473,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Overhead UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8607010663545374802, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8607010663545374802, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8607010663545374802, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7ed8f13cdae3ff48a8b124a4a03cae7, type: 3}

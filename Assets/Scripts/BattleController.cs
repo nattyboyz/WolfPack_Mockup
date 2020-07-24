@@ -19,6 +19,7 @@ public class BattleController : MonoBehaviour
     [SerializeField] List<BattleCharacter> enemies;//3 4 5
 
     [SerializeField] List<BattleCharacter> turns;
+    //bool is_runnning = false; 
 
     StateMachine turnbaseState;
     public StateMachine TurnbaseState { get => turnbaseState; set => turnbaseState = value; }
@@ -120,7 +121,8 @@ public class BattleController : MonoBehaviour
     public void ExecuteTurn()
     {
         //BattleCharacter character = turns[currentTurn];
-
+        //if (is_runnning) return;
+        //is_runnning = true;
         SetCurrentCharacter(turns[currentTurn]);
         EnterTurn(turns[currentTurn]);
         //unitStatsUI.Clear(UnitStatsUIController.Side.Right);

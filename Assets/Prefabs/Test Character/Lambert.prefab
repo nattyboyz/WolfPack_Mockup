@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7869886198883816914}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.21, y: 0, z: 0}
+  m_LocalPosition: {x: 0.21, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.30000004, z: 1}
   m_Children: []
   m_Father: {fileID: 3265031473102636776}
@@ -262,7 +262,7 @@ MonoBehaviour:
   type: 0
   id: 
   characterData: {fileID: 7869886200086443012}
-  graphic: {fileID: 7869886200086443018}
+  graphic: {fileID: 879476342887632143}
   characterSpine: {fileID: 432579008}
   overheadUI: {fileID: 8972894312946068752}
 --- !u!114 &7869886200086443012

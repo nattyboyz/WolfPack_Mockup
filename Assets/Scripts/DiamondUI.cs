@@ -44,7 +44,7 @@ public class DiamondUI : MonoBehaviour
             gemUI.gameObject.SetActive(true);
             gemUI.transform.position = 
                 new Vector3(gems[kvp.Key].transform.position.x,
-                gems[kvp.Key].transform.position.y + 1,
+                gems[kvp.Key].transform.position.y + .5f,
                 gems[kvp.Key].transform.position.z);
             gemUI.transform.DOMoveY(gems[kvp.Key].transform.position.y,0.2f);
             ind.Add(kvp.Key);
@@ -79,19 +79,29 @@ public class DiamondUI : MonoBehaviour
         
     }
 
-    public static int GetEmptySlot(Gem[] gems)
-    {
-        for(int i = 0; i < gems.Length; i++)
-        {
-            if (gems[i] == Gem.None) return i;
-        }
-        return -1;
-    }
-    public static int GetExcludeSlot(Gem[] gems, Gem excludedGem)
+    //public static int GetEmptySlot(Gem[] gems)
+    //{
+    //    for(int i = 0; i < gems.Length; i++)
+    //    {
+    //        if (gems[i] == Gem.None) return i;
+    //    }
+    //    return -1;
+    //}
+
+    public static int GetSlotExclude(Gem[] gems, Gem exclude)
     {
         for (int i = 0; i < gems.Length; i++)
         {
-            if (gems[i] != excludedGem) return i;
+            if (gems[i] != exclude) return i;
+        }
+        return -1;
+    }
+
+    public static int GetSlotInclude(Gem[] gems, Gem include)
+    {
+        for (int i = 0; i < gems.Length; i++)
+        {
+            if (gems[i] != include) return i;
         }
         return -1;
     }

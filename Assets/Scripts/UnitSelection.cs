@@ -80,7 +80,7 @@ public class UnitSelection : MonoBehaviour
             {
                 Submit();
             }
-            else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape))
+            else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
             {
                 activeSelectTarget = false;
                 Deselect(selected_slots);

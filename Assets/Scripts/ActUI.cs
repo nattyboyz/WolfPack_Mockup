@@ -68,7 +68,7 @@ public class ActUI : ListoUI
                         }
 
                         owner.Data.Battle.ui_lastTarget = idx;
-                        Debug.Log(owner.Data.Battle.ui_lastTarget);
+                        //Debug.Log(owner.Data.Battle.ui_lastTarget);
                     };
 
                     unitSelection.Active(TargetMode.Single, owner.Data.Battle.ui_lastTarget);

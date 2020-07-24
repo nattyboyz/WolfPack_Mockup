@@ -51,7 +51,7 @@ public class ListoUI : MonoBehaviour
         {
             PageShift(1);
         }
-        else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape))
+        else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
         {
             onExit?.Invoke();
         }

@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(DiamondUI))]
 public class DiamondPreview : MonoBehaviour
@@ -13,13 +16,38 @@ public class DiamondPreview : MonoBehaviour
     [SerializeField] Dictionary<int,Gem> gemSlots = new Dictionary<int, Gem>();
     public Action<Dictionary<int, Gem>> onSubmit;
     public Action onCancel;
+
+    [SerializeField] UnityEvent activeEvent;
+    [SerializeField] UnityEvent deactivateEvent;
+
     int focus = 0;
+
+    [SerializeField] Image glowBack;
+    [SerializeField] Image handleLeft;
+    [SerializeField] Image handleRight;
+
+    private void Start()
+    {
+        Active(false);
+    }
 
     public void Active(bool value)
     {
         isActive = value;
-        if(value) diamondUI.gameObject.transform.localScale = new Vector3(1.2f, 1.2f, 1);
-        else diamondUI.gameObject.transform.localScale = new Vector3(1f, 1f, 1);
+        if (value)
+        {
+            diamondUI.gameObject.transform.DOScale(new Vector3(1.4f, 1.4f, 1),0.13f);
+            //diamondUI.gameObject.transform.localScale = new Vector3(1.4f, 1.4f, 1);
+            activeEvent.Invoke();
+        }
+        else
+        {
+            diamondUI.gameObject.transform.localScale = new Vector3(1f, 1f, 1);
+            deactivateEvent.Invoke();
+        }
+        glowBack.gameObject.SetActive(value);
+        handleLeft.gameObject.SetActive(value);
+        handleRight.gameObject.SetActive(value);
     }
 
     public void StartChoose(Gem[] gemData, int startIndex = 0)
@@ -27,6 +55,15 @@ public class DiamondPreview : MonoBehaviour
         this.gemData = gemData;
         focus = startIndex;
         PreviewGems(0, gemData);
+    }
+
+    public static void Bounce(Image img)
+    {
+        Sequence s = DOTween.Sequence();
+   
+        s.Append(img.rectTransform.DOScale(0.8f, 0.1f));
+        s.Append(img.rectTransform.DOScale(1, 0.1f));
+        s.Restart();
     }
 
     public void Update()
@@ -38,7 +75,8 @@ public class DiamondPreview : MonoBehaviour
                 Debug.Log("Left");
                 focus--;
                 if (focus < 0) focus = diamondUI.Gems.Length - 1;
-                PreviewGems(focus,gemData);
+                PreviewGems(focus, gemData);
+                Bounce(handleLeft);
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
@@ -46,6 +84,7 @@ public class DiamondPreview : MonoBehaviour
                 focus++;
                 if (focus >= diamondUI.Gems.Length) focus = 0;
                 PreviewGems(focus, gemData);
+                Bounce(handleRight);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -54,7 +93,7 @@ public class DiamondPreview : MonoBehaviour
                 HidePreviewGems();
                 Active(false);
             }
-            else if (Input.GetKeyDown(KeyCode.Z))
+            else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
             {
                 Debug.Log("Back");
                 onCancel?.Invoke();
@@ -85,7 +124,7 @@ public class DiamondPreview : MonoBehaviour
             else idx = start + i;
             SetPreviewGem(idx, gemsData[i]);
             gemSlots.Add(idx, gemsData[i]);
-            Debug.Log(idx + " : to " + gemsData[i]);
+            //Debug.Log(idx + " : to " + gemsData[i]);
         }
     }
 
