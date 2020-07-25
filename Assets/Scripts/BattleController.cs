@@ -130,33 +130,53 @@ public class BattleController : MonoBehaviour
 
     public void ShowActionUI(BattleCharacter character)
     {
-        actionUI.onActClick = 
-            actionUI.onItemClick = 
-            actionUI.onSkipClick =
-        () => {
-            actUI.Init(character, this);
-            actUI.Active(true);
+        actionUI.onSubmit = (code) =>
+        {
+            if (code == "Attack")
+            {
+                attackUI.Init(character, this);
+                attackUI.Active(true);
+                actionUI.Active(false);
+            }
+            else if (code == "Act")
+            {
+                actUI.Init(character, this);
+                actUI.Active(true);
+                actionUI.Active(false);
+            }
+            else if (code == "Item")
+            {
+                actUI.Init(character, this);
+                actUI.Active(true);
+                actionUI.Active(false);
+            }
+            else if (code == "Skip")
+            {
+                actUI.Init(character, this);
+                actUI.Active(true);
+                actionUI.Active(false);
+            }
         };
-
-        actionUI.onAttackClick = () => {
-            attackUI.Init(character, this);
-            attackUI.Active(true);
-        };
-
+    
         attackUI.onExit = () =>
         {
             attackUI.Active(false);
-            actionUI.Show(character.transform.position);
+       
+            actionUI.SetPosition(character.transform.position);
+            actionUI.Active(true);
         };
 
         actUI.onExit = () =>
         {
             actUI.Active(false);
-            actionUI.Show(character.transform.position);
+         
+            actionUI.SetPosition(character.transform.position);
+            actionUI.Active(true);
         };
 
+        actionUI.SetPosition(character.transform.position);
+        actionUI.Active(true);
 
-        actionUI.Show(character.transform.position);
 
     }
 

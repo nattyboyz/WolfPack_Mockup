@@ -33,7 +33,6 @@ Shader "Spine/Skeleton Lit ZWrite" {
 
 		Pass {
 			Name "Normal"
-
 			Tags { "LightMode"="Vertex" "Queue"="Transparent" "IgnoreProjector"="true" "RenderType"="Transparent" }
 
 			ZWrite On
