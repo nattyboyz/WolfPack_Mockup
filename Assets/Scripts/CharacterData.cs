@@ -6,10 +6,9 @@ using UnityEngine;
 public class CharacterData : MonoBehaviour
 {
     [SerializeField] CharacterBaseData baseData;
-    UnitBattleData battleData;
+    [SerializeField] UnitBattleData battleData;
     [SerializeField] PortraitData portraitData;
     [SerializeField] CharacterStats stats;
-
 
     public UnitBattleData Battle { get => battleData; set => battleData = value; }
     public CharacterBaseData Base { get => baseData; set => baseData = value; }
@@ -44,8 +43,8 @@ public class CharacterStats
         UnitBattleData data = new UnitBattleData();
         data.hp = this.hp;
         data.maxHp = this.maxHp;
-        data.sp = this.sp;
-        data.maxSp = this.maxSp;
+        data.ap = this.sp;
+        data.maxAp = this.maxSp;
         data.gemStack = this.stack;
         data.level = this.level;
         data.attack = this.attack;
@@ -73,8 +72,8 @@ public class UnitBattleData
 {
     public float hp;
     public float maxHp;
-    public float sp;
-    public float maxSp;
+    public float ap;
+    public float maxAp;
 
     public int level;
     public int attack;
@@ -84,16 +83,12 @@ public class UnitBattleData
     public Gem[] gems;
     public int gemStack = 0;
     public string emote = "idle";
-    public bool isDead;
+    public bool isDead = false;
 
     //UI cache data 
     public int ui_lastAction = 0;
     public int ui_lastTarget = 0;
     public int ui_lastAct = 0;
     public int ui_lastAttack = 0;
-
-
-
-
 
 }

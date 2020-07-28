@@ -7,6 +7,9 @@ using UnityEngine;
     order = 1)]
 public class CharacterBaseData : ScriptableObject
 {
-    public string c_name;
-    public string description;
+    [SerializeField] private string c_name;
+    [SerializeField] private string description;
+
+    public string C_name { get => c_name;}
+    public string Description { get => description;}
 }

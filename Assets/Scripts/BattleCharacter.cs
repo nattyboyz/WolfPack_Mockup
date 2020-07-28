@@ -23,6 +23,10 @@ public class BattleCharacter : MonoBehaviour
     public Team Type { get => type; set => type = value; }
     public CharacterSpine CharacterSpine { get => characterSpine; set => characterSpine = value; }
 
+    //Event
+    public Action onDead;
+    public Action onGiveUp;
+
     private void Awake()
     {
         overheadUI.Active(false);
@@ -78,5 +82,53 @@ public class BattleCharacter : MonoBehaviour
             //overheadUI.SetGem(kvp.Key, kvp.Value);
         }
         yield return overheadUI.DiamondUi.ieSetGems(gemSlots);
+    }
+
+    public IEnumerator ieTakeDamage(BattleOutputData data)
+    {
+        ModifyHp(-data.value);
+        yield return overheadUI.ieModifyHp(-data.value);
+        //yield return new WaitForSeconds(0.2f);
+    }
+
+    void ModifyHp(float value)
+    {
+        if (characterData.Battle.hp + value <= 0)
+        {
+            characterData.Battle.hp = 0;
+            characterData.Battle.isDead = true;
+            onDead?.Invoke();
+        }
+        else if (characterData.Battle.hp + value >= characterData.Battle.maxHp)
+        {
+            characterData.Battle.hp = characterData.Battle.maxHp;
+        }
+        else
+        {
+            characterData.Battle.hp += value;
+        }
+    }
+
+    void ModifyAp(float value)
+    {
+        if (characterData.Battle.ap + value <= 0)
+        {
+            characterData.Battle.ap = 0;
+            //isDead = true;
+            //onDead?.Invoke();
+        }
+        else if (characterData.Battle.ap + value >= characterData.Battle.maxAp)
+        {
+            characterData.Battle.ap = characterData.Battle.maxHp;
+        }
+        else
+        {
+            characterData.Battle.ap += value;
+        }
+    }
+
+    public void Dead()
+    {
+        this.gameObject.SetActive(false);
     }
 }

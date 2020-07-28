@@ -9,8 +9,9 @@ public class OverHeadUI : MonoBehaviour
     [SerializeField] DiamondUI diamondUi;
     [SerializeField] DiamondPreview diamondSelection;
 
-    public DiamondUI DiamondUi { get => diamondUi; set => diamondUi = value; }
-    public DiamondPreview DiamondSelection { get => diamondSelection; set => diamondSelection = value; }
+    public DiamondUI DiamondUi { get => diamondUi; }
+    public DiamondPreview DiamondSelection { get => diamondSelection;}
+    public HpUI HpUi { get => hpUi;}
 
     public void Active(bool value)
     {
@@ -21,6 +22,12 @@ public class OverHeadUI : MonoBehaviour
     {
         hpUi.Modify(value);
     }
+
+    public IEnumerator ieModifyHp(float value)
+    {
+        yield return hpUi.ieModify(value);
+    }
+
 
     public void SetGem(int slot, Gem gemType)
     {

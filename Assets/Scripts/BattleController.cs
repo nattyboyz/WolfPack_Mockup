@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Plugins.StateMachine;
+using DG.Tweening;
 
 public class BattleController : MonoBehaviour
 {
@@ -35,12 +36,26 @@ public class BattleController : MonoBehaviour
         foreach (BattleCharacter ch in allies)
         {
             ch.Init();
+            //ch.onDead = OnCharacterDead;
+            //ch.onGiveUp = OnCharacterGiveUp;
         }
 
         foreach (BattleCharacter ch in enemies)
         {
             ch.Init();
+            //ch.onDead = OnCharacterDead;
+            //ch.onGiveUp = OnCharacterGiveUp;
         }
+    }
+
+    public void OnCharacterDead(BattleCharacter b)
+    {
+        Debug.Log("OnCharacterDead");
+    }
+
+    public void OnCharacterGiveUp()
+    {
+        Debug.Log("OnCharacterGiveUp");
     }
 
     public void SetCurrentCharacter(BattleCharacter character)
@@ -113,7 +128,7 @@ public class BattleController : MonoBehaviour
         foreach (BattleCharacter c in query)
         {
             i++;
-            Debug.Log(i + " " +c.Data.Base.c_name);
+            Debug.Log(i + " " +c.Data.Base.C_name);
         }
     }
 
@@ -224,13 +239,13 @@ public class BattleController : MonoBehaviour
         {
             if (slot.Character != null)
             {
-                s += slot.Character.Data.Base.c_name +", ";
+                s += slot.Character.Data.Base.C_name +", ";
             }
             slot.Character.OverheadUI.Active(true);
             slot.Character.OverheadUI.ChooseGemSlot(skill.Gems, OnSubmitGemSlot, OnCancelGemSelection);
         }
 
-        Debug.Log("[BattleCrtl]: ["+ owner.Data.Base.c_name +
+        Debug.Log("[BattleCrtl]: ["+ owner.Data.Base.C_name +
             "] apply skill <b>[" + 
             skill.SkillName+ "]</b> to " + s);
     }
@@ -272,24 +287,130 @@ public class BattleController : MonoBehaviour
       List<BattleCharacterSlot> targets,
       BattleSkillData skill)
     {
-        string s = "";
+        // string s = "";
         foreach (BattleCharacterSlot slot in targets)
         {
-            if (slot.Character != null)
-            {
-                s += slot.Character.Data.Base.c_name + ", ";
-            }
-
+            slot.Character.OverheadUI.Active(true);
         }
+        StartCoroutine(ieExecuteBattleSkill(owner, targets, skill));
+        //Debug.Log("[BattleCrtl]: [" + owner.Data.Base.c_name +
+        //    "] apply battle skill <b>[" +
+        //    skill.SkillName + "]</b> to " + s);
+    }
 
-        Debug.Log("[BattleCrtl]: [" + owner.Data.Base.c_name +
-            "] apply skill <b>[" +
-            skill.SkillName + "]</b> to " + s);
+    IEnumerator ieExecuteBattleSkill(BattleCharacter owner,
+       List<BattleCharacterSlot> targets,
+       BattleSkillData skill)
+    {
+     
+        yield return new WaitForSeconds(0.2f);//This is delay..
+        //Pre attack: duration depend on attack animation...
+        yield return iePreAttack(owner, targets, skill);
+        //Process attack
+        Dictionary<BattleCharacter, BattleOutputData> processData;
+        Dictionary<BattleCharacter, Dictionary<PostEffectType, int>> postData;
+        ProcessAttack(owner, targets, skill,out processData, out postData);
+
+        int count = 0;
+        foreach(KeyValuePair<BattleCharacter,BattleOutputData> kvp in processData)
+        {
+            StartCoroutine(kvp.Key.ieTakeDamage(kvp.Value));
+            if (count == processData.Count - 1)//Consider just the last tween
+            {
+                yield return kvp.Key.OverheadUI.HpUi.HpTween.WaitForCompletion();
+            }
+            count++;
+        }
+        yield return new WaitForSeconds(0.2f);
+        //Post attack
+        yield return iePostAttack(owner, postData);
+        foreach (BattleCharacterSlot slot in targets)
+        {
+            slot.Character.OverheadUI.Active(false);
+        }
 
         MoveTurnForward();
         ExecuteTurn();
     }
 
+    IEnumerator iePreAttack(BattleCharacter owner,
+      List<BattleCharacterSlot> targets,
+      BattleSkillData skill)
+    {
+        yield return owner.CharacterSpine.ieAttack();
+    }
+
+   void ProcessAttack(BattleCharacter owner,
+          List<BattleCharacterSlot> targets,
+          BattleSkillData skill, 
+          out Dictionary<BattleCharacter, BattleOutputData> processData,
+          out Dictionary<BattleCharacter, Dictionary<PostEffectType, int>> postData)
+    {
+        processData = new Dictionary<BattleCharacter, BattleOutputData>();
+        postData = new Dictionary<BattleCharacter, Dictionary<PostEffectType, int>>();
+
+        foreach (BattleCharacterSlot slot in targets)
+        {
+            BattleCharacter target = slot.Character;
+            BattleOutputData data = new BattleOutputData();
+            data.value = Calculate(owner, target, skill);
+            data.type = BattleOutputData.Type.Damage;
+            processData.Add(target, data);
+
+            //Add pose effect
+            Dictionary<PostEffectType, int> postEffects = new Dictionary<PostEffectType, int>();
+    
+            if (target.Data.Battle.hp - data.value <= 0)
+            {
+                postEffects.Add(PostEffectType.Dead, 0);
+                Debug.Log("[Process Atk] <color=red>Will dead soon</color>");
+            }
+
+            if(postEffects.Count>0) postData.Add(target, postEffects);
+        }
+        //yield return owner.CharacterSpine.ieAttack();
+       
+    }
+
+    float Calculate(
+        BattleCharacter owner, 
+        BattleCharacter target,
+        BattleSkillData skill)
+    {
+        //KeyValuePair<BattleCharacter, BattleOutputData> data = 
+        //    new KeyValuePair<BattleCharacter, BattleOutputData>();
+        return skill.Damage.max;
+    }
+
+    IEnumerator iePostAttack(BattleCharacter owner, Dictionary<BattleCharacter, Dictionary<PostEffectType, int>> postData)
+    {
+        foreach (KeyValuePair<BattleCharacter, Dictionary<PostEffectType, int>> kvp in postData)
+        {
+            foreach (KeyValuePair<PostEffectType, int> effect in kvp.Value)
+            {
+                Debug.Log("[POST EFFECT]: Set <b>[" + kvp.Key.Data.Base.C_name +
+                    "]</b> Effect " + effect.Key.ToString() +
+                    " Value " + effect.Value.ToString());
+                if(effect.Key == PostEffectType.Dead)
+                {
+                    kvp.Key.Dead();
+                }
+            }
+        }
+        yield return new WaitForSeconds(0.2f);
+    }
+
 }
+
+public class BattleOutputData
+{
+    public enum Type { None, Damage, Heal }
+    public Type type;
+    public float value;
+    public Dictionary<string, int> viewEffects = new Dictionary<string, int>();
+}
+
+public enum PostEffectType { None, Dead, Heal }
+
 
 
