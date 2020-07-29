@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Twitlonger
   m_EditorClassIdentifier: 
   skillName: Twitlonger
-  sp: 3
+  ap: 2
   gems: 030000000100000001000000
   lore: You disappointed us, A LOT
   description: Take bx1 rx2 damage
+  targetOption:
+    mode: 0
+    filter: 2
+    allowSelf: 0
+    selfOnly: 0

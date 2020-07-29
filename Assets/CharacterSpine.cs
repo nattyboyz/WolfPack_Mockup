@@ -42,6 +42,20 @@ public class CharacterSpine : MonoBehaviour
         }
     }
 
+    public IEnumerator ieGetHit()
+    {
+        if (animator != null /*&& attack_clip != null*/)
+        {
+            animator.SetTrigger("gethit");
+            yield return null;
+        }
+        else
+        {
+
+            yield break;
+        }
+    }
+
     IEnumerator WaitTillFinishClip(AnimationClip clip)
     {
         yield return new WaitForSeconds(clip.length);

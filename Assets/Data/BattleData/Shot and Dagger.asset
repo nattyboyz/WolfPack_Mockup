@@ -13,9 +13,14 @@ MonoBehaviour:
   m_Name: Shot and Dagger
   m_EditorClassIdentifier: 
   skillName: Shot&Dagger
-  sp: 2
+  ap: 1
   damage:
     min: 15
     max: 30
   lore: this is a very powerful skill
   description: Take gx2 for 2 turn
+  targetOption:
+    mode: 0
+    filter: 2
+    allowSelf: 0
+    selfOnly: 0

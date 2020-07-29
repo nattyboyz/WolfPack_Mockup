@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Bad joke
   m_EditorClassIdentifier: 
   skillName: Bad joke
-  sp: 2
+  ap: 1
   gems: 01000000
   lore: What!? not funny enough?
   description: Take rx1 damage
+  targetOption:
+    mode: 0
+    filter: 2
+    allowSelf: 0
+    selfOnly: 0

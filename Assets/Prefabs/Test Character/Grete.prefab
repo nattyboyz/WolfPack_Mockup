@@ -115,12 +115,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseData: {fileID: 11400000, guid: e3e580b63d13b824a95e4b82287bf431, type: 2}
+  battleData:
+    hp: 0
+    maxHp: 0
+    ap: 0
+    maxAp: 0
+    level: 0
+    attack: 0
+    defense: 0
+    speed: 0
+    gems: 
+    gemStack: 0
+    emote: idle
+    isDead: 0
+    ui_lastAction: 0
+    ui_lastTarget: 0
+    ui_lastAct: 0
+    ui_lastAttack: 0
   portraitData: {fileID: 11400000, guid: bc2c235c45415cb48b1a8e2075f9b92f, type: 2}
   stats:
     hp: 50
     maxHp: 100
-    sp: 20
-    maxSp: 50
+    ap: 0
+    maxAp: 5
     stack: 1
     level: 2
     attack: 10
@@ -324,6 +341,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 909733579933531848}
     m_Modifications:
+    - target: {fileID: 409294077655276517, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1157931004144469496, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -359,6 +381,31 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 0.25098038
       objectReference: {fileID: 0}
+    - target: {fileID: 1499596128463490291, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3160695276153703479, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3200988004624161949, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4958002438089159982, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7213180377859312339, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7734289440428695358, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -379,6 +426,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7977686267245273077, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -392,7 +444,7 @@ PrefabInstance:
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.08
       objectReference: {fileID: 0}
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
@@ -442,7 +494,7 @@ PrefabInstance:
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 4.40802
+      value: 4.71
       objectReference: {fileID: 0}
     - target: {fileID: 8387552764526561005, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
         type: 3}
@@ -508,6 +560,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FillAmount
       value: 0.162
+      objectReference: {fileID: 0}
+    - target: {fileID: 8723206744107513734, guid: e7ed8f13cdae3ff48a8b124a4a03cae7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7ed8f13cdae3ff48a8b124a4a03cae7, type: 3}

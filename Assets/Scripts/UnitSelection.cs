@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 public enum TargetMode { Single, Team, All }
+public enum TargetFilter { None, Allies, Enemy, Any}
 
 public class UnitSelection : MonoBehaviour
 {
@@ -15,42 +16,38 @@ public class UnitSelection : MonoBehaviour
 
     [SerializeField] List<BattleCharacterSlot> selected_slots;
 
-    int selected_index = 0;
-    int currentTeam = 0;
-
     [SerializeField] GameObject highlight;
     public Action<List<BattleCharacterSlot>, int> onSelect;
     public Action<List<BattleCharacterSlot>> onSubmit;
     public Action onExit;
 
-    TargetMode mode;
+    BattleCharacter owner;
+    TargetOption option;
 
-    public void Active(TargetMode mode, int startValue)
+   // TargetMode mode;
+    int selected_index = 0;
+
+    public void Active(BattleCharacter owner, TargetOption option, int startValue)
     {
         //Debug.Log("ActiveUnitSelection");
-        StartCoroutine(ieActive(mode, startValue));
+        StartCoroutine(ieActive(owner, option, startValue));
     }
 
-    IEnumerator ieActive(TargetMode mode, int startValue)
+    IEnumerator ieActive(BattleCharacter owner, TargetOption option, int startValue)
     {
         //Set default
-        if (mode == TargetMode.Single)
-        {
-            Select(new List<BattleCharacterSlot> { allSlot[startValue] });
-            selected_index = startValue;
-        }
-        else
-        {
-            if (startValue == 0)
-                Select(allySlots);
-            else
-                Select(enemySlots);
+        this.option = option;
+        this.owner = owner;
+        yield return new WaitForEndOfFrame();
 
-            currentTeam = startValue;
+        if (option.mode == TargetMode.Single)
+        {
+            selected_index = TryGetIndex(startValue);
+            Select(new List<BattleCharacterSlot> { allSlot[selected_index] });
         }
 
         yield return new WaitForEndOfFrame();
-        this.mode = mode;
+
         activeSelectTarget = true;
     }
 
@@ -67,13 +64,13 @@ public class UnitSelection : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
             {
-                if (mode == TargetMode.Single) TargetShift(-1);
+                if (this.option.mode == TargetMode.Single) TargetShift(-1);
                 else GroupShift(-1);
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
 
-                if (mode == TargetMode.Single) TargetShift(1);
+                if (this.option.mode == TargetMode.Single) TargetShift(1);
                 else GroupShift(1);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
@@ -100,42 +97,65 @@ public class UnitSelection : MonoBehaviour
     //-1 +1
     public void TargetShift(int mod)
     {
-        int target = selected_index;
-        if (selected_index < 0) target = selected_index = 0;
+        int idx = selected_index;
+        if (selected_index < 0) idx = selected_index = 0;
 
-        BattleCharacter character = null;
+        BattleCharacter target = null;
         int time = 0;
         do
         {
-            if (time > allSlot.Count)
+            if (time > allSlot.Count)//Prevent infinity loop
             {
-                Deselect(new List<BattleCharacterSlot>() { allSlot[selected_index] });
+                //Deselect(new List<BattleCharacterSlot>() { allSlot[selected_index] });
                 return;
             }
-            if (target + mod >= allSlot.Count) target = 0;
-            else if (target + mod < 0) target = allSlot.Count - 1;
-            else target += mod;
-            character = allSlot[target].Character;
+            if (idx + mod >= allSlot.Count) idx = 0;
+            else if (idx + mod < 0) idx = allSlot.Count - 1;
+            else idx += mod;
+            target = allSlot[idx].Character;
             time++;
 
-        } while (character == null || character.Data.Battle.isDead);
+        } while (!IsMatch(this.owner,target,this.option));
+
+        
 
         Deselect(new List<BattleCharacterSlot>() { allSlot[selected_index] });
 
-        selected_index = target;
-        Select(new List<BattleCharacterSlot>() { allSlot[target] });
+        selected_index = idx;
+        Select(new List<BattleCharacterSlot>() { allSlot[selected_index] });
 
     
         //Debug.Log("Select " + character.Data.Base.c_name);
     }
 
+    int TryGetIndex(int idx)
+    {
+        //BattleCharacter target = allSlot[idx].Character;
+        int iteration = 0;
+
+        while (!IsMatch(this.owner, allSlot[idx].Character, this.option))
+        {
+            if (iteration > allSlot.Count)//Prevent infinity loop
+            {
+                return idx;
+            }
+
+            idx++;
+            iteration++;
+            if (idx >= allSlot.Count) idx = 0;
+            else if (idx < 0) idx = allSlot.Count - 1;
+        }
+
+        return idx;
+    }
+
     public void GroupShift(int mod)
     {
-        if (currentTeam + mod > 1) currentTeam = 0;
-        else if (currentTeam + mod < 0) currentTeam = 1;
-        else currentTeam += mod;
+        if (selected_index + mod > 1) selected_index = 0;
+        else if (selected_index + mod < 0) selected_index = 1;
+        else selected_index += mod;
 
-        if (currentTeam == 0)
+        if (selected_index == 0)
         {
             Deselect(enemySlots);
             Select(allySlots);
@@ -148,10 +168,10 @@ public class UnitSelection : MonoBehaviour
         }
     }
 
-    public void Select(List<BattleCharacterSlot> slots/*, rule*/)
+    void Select(List<BattleCharacterSlot> slots)
     {
         selected_slots.Clear();
-        onSelect?.Invoke(slots, selected_index);
+
         //else onSelect?.Invoke(slots, selected_index);
 
         foreach (BattleCharacterSlot slot in slots)
@@ -163,9 +183,29 @@ public class UnitSelection : MonoBehaviour
                 selected_slots.Add(slot);
             }
         }
+        onSelect?.Invoke(selected_slots, selected_index);
     }
 
-    public void Deselect(List<BattleCharacterSlot> slots/*, rule*/)
+    /// <summary>
+    /// Select previous targets either single or group
+    /// </summary>
+    public void SelectPrevious()
+    {
+        foreach (BattleCharacterSlot slot in selected_slots)
+        {
+            if (slot.Character != null)
+            {
+                slot.Character.Focus(true);
+                slot.Highlight(true);
+                //selected_slots.Add(slot);
+            }
+        }
+
+        onSelect?.Invoke(selected_slots, selected_index);
+        activeSelectTarget = true;
+    }
+
+    public void Deselect(List<BattleCharacterSlot> slots)
     {
         foreach (BattleCharacterSlot slot in slots)
         {
@@ -177,31 +217,35 @@ public class UnitSelection : MonoBehaviour
             }
         }
     }
-    #region Test button functions
 
-    public void Btn_SelectTarget()
+
+    static bool IsMatch(BattleCharacter owner, BattleCharacter target, TargetOption option)
     {
-        mode = TargetMode.Single;
-        activeSelectTarget = true;
-    }
+        if (target == null) return false;
+        if (target.Data.Battle.isDead) return false;
 
-    public void Btn_SelectTeam()
-    {
-        mode = TargetMode.Team;
-        activeSelectTarget = true;
-    }
+        Debug.Log("[Match] " + owner.name + " " + target.name + option.selfOnly + " " + option.allowSelf);
 
-    public void Btn_SelectAll()
-    {
-        mode = TargetMode.All;
-        activeSelectTarget = true;
-    }
+        if (option.selfOnly) {
+            if (target == owner) return true;
+            else return false;
+        }
 
-    #endregion
+        if (!option.allowSelf && target == owner) return false;
+
+        if (option.filter == TargetFilter.Allies && (owner.Type != target.Type)) return false;
+
+        if (option.filter == TargetFilter.Enemy && (owner.Type == target.Type)) return false;
+        return true;
+    }
 
 }
 
+[Serializable]
 public class TargetOption
 {
     public TargetMode mode;
+    public TargetFilter filter;
+    public bool allowSelf;
+    public bool selfOnly;
 }

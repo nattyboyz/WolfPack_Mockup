@@ -611,6 +611,7 @@ MonoBehaviour:
   allowSubmit: 1
   value: 
   sp_txt: {fileID: 7548680091363538000}
+  sp_img: {fileID: 7656722002778266923}
   main_img: {fileID: 4856893400767911939}
   gem_imgs:
   - {fileID: 4154639525937848597}
@@ -619,6 +620,8 @@ MonoBehaviour:
   - {fileID: 1795750147309749787}
   enterColor: {r: 0.122641504, g: 0.122641504, b: 0.122641504, a: 1}
   normalTextColor: {r: 0.9960785, g: 0.9960785, b: 0.9960785, a: 1}
+  apEnough: {r: 0.86274517, g: 0.74509805, b: 0.12941177, a: 1}
+  apNotEnough: {r: 0.735849, g: 0.21696995, b: 0.12842648, a: 1}
 --- !u!222 &4188366409530066830
 CanvasRenderer:
   m_ObjectHideFlags: 0

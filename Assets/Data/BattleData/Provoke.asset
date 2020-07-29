@@ -13,9 +13,14 @@ MonoBehaviour:
   m_Name: Provoke
   m_EditorClassIdentifier: 
   skillName: Provoke
-  sp: 2
+  ap: 0
   damage:
     min: 0
     max: 0
   lore: Take next damage for ally
   description: Take next damage for ally
+  targetOption:
+    mode: 0
+    filter: 1
+    allowSelf: 0
+    selfOnly: 1

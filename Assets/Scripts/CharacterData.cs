@@ -26,8 +26,8 @@ public class CharacterStats
 {
     public float hp;
     public float maxHp;
-    public float sp;
-    public float maxSp;
+    public float ap;
+    public float maxAp;
     public int stack;
     public int level;
     public int attack;
@@ -43,8 +43,8 @@ public class CharacterStats
         UnitBattleData data = new UnitBattleData();
         data.hp = this.hp;
         data.maxHp = this.maxHp;
-        data.ap = this.sp;
-        data.maxAp = this.maxSp;
+        data.ap = this.ap;
+        data.maxAp = this.maxAp;
         data.gemStack = this.stack;
         data.level = this.level;
         data.attack = this.attack;

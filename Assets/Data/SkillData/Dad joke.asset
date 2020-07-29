@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Dad joke
   m_EditorClassIdentifier: 
   skillName: Dad joke
-  sp: 1
+  ap: 2
   gems: 
   lore: this is a very powerful skill
   description: Enemy get gx2 damge for 2 turns
+  targetOption:
+    mode: 0
+    filter: 2
+    allowSelf: 0
+    selfOnly: 0

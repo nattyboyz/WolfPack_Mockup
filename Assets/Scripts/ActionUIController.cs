@@ -30,17 +30,17 @@ public class ActionUIController : MonoBehaviour
     {
         if (!isActive) return;
 
-        if (allowSelect && Input.GetKeyDown(KeyCode.A))
+        if (/*allowSelect &&*/ Input.GetKeyDown(KeyCode.A))
         {
             TargetShift2(-1);
         }
-        else if (allowSelect && Input.GetKeyDown(KeyCode.D))
+        else if (/*allowSelect && */Input.GetKeyDown(KeyCode.D))
         {
             TargetShift2(1);
         }
-        else if (allowSelect && Input.GetKeyDown(KeyCode.Space))
+        else if (/*allowSelect &&*/ Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log(buttons[selected_index].value);
+            //Debug.Log(buttons[selected_index].value);
             onSubmit?.Invoke(buttons[selected_index].value);
         }
         else if (allowSelect && Input.GetKey(KeyCode.A))
@@ -164,6 +164,11 @@ public class ActionUIController : MonoBehaviour
 
         int half = Mathf.FloorToInt((buttons.Count - 1) * 0.5f);
         selected_index = half;
+
+        if(menuMove!=null && menuMove.IsPlaying())
+        {
+            menuMove.Kill();
+        }
 
         menuMove = DOTween.Sequence();
 

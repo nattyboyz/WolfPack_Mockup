@@ -13,7 +13,7 @@ public class ListoButton : Selectable, IPointerEnterHandler,
     [SerializeField] protected TextMeshProUGUI name_txt;
 
     public bool allowSubmit = true;
-    public Action<string> onClick;
+    public Action<ListoButton> onClick;
     public Action<ActButton> onEnter;
     public Action<ActButton> onExit;
     public string value;

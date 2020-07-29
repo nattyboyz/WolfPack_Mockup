@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Bully
   m_EditorClassIdentifier: 
   skillName: Bully
-  sp: 3
+  ap: 3
   gems: 0100000001000000
   lore: ....
   description: Take rx2 damage
+  targetOption:
+    mode: 0
+    filter: 2
+    allowSelf: 0
+    selfOnly: 0

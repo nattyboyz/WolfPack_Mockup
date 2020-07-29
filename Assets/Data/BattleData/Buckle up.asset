@@ -13,9 +13,14 @@ MonoBehaviour:
   m_Name: Buckle up
   m_EditorClassIdentifier: 
   skillName: Buckle up
-  sp: 1
+  ap: 0
   damage:
     min: 0
     max: 0
   lore: this is a very powerful skill
   description: Take gx2 for 2 turn
+  targetOption:
+    mode: 0
+    filter: 1
+    allowSelf: 0
+    selfOnly: 1

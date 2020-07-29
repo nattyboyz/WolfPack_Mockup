@@ -8,7 +8,7 @@ public class ListoUI : MonoBehaviour
 {
     [SerializeField] protected bool isActive = false;
     [SerializeField] protected Canvas main_canvas;
-    [SerializeField] protected Selectable start_selector;
+   // [SerializeField] protected Selectable start_selector;
 
     [SerializeField] ListoButton pattern;
     [Min(1)][SerializeField] protected int button_per_page = 4;
@@ -141,7 +141,7 @@ public class ListoUI : MonoBehaviour
 
     public virtual void Select(int index)
     {
-        Debug.Log(index);
+        //Debug.Log(index);
         if(index >= buttons.Count)
         {
             Debug.Log(index + "/" + buttons.Count);
@@ -149,10 +149,10 @@ public class ListoUI : MonoBehaviour
             index = (index % buttons.Count);
         }
         //Open if want to set 
-        Debug.Log("Page " + page);
+        //Debug.Log("Page " + page);
         if (page > 0) Page(page);
 
-        Debug.Log("Try to select " + index + ":Page " + page) ;
+        //Debug.Log("Try to select " + index + ":Page " + page) ;
         buttons[index].Select();
         selected_index = index;
     }

@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Awuu
   m_EditorClassIdentifier: 
   skillName: Awuu
-  sp: 3
+  ap: 1
   gems: 030000000100000004000000
   lore: Awuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
   description: Take bx1 rx1 gx1
+  targetOption:
+    mode: 0
+    filter: 1
+    allowSelf: 1
+    selfOnly: 0

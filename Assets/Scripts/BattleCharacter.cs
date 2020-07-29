@@ -24,7 +24,7 @@ public class BattleCharacter : MonoBehaviour
     public CharacterSpine CharacterSpine { get => characterSpine; set => characterSpine = value; }
 
     //Event
-    public Action onDead;
+    public Action<BattleCharacter> onDead;
     public Action onGiveUp;
 
     private void Awake()
@@ -97,7 +97,7 @@ public class BattleCharacter : MonoBehaviour
         {
             characterData.Battle.hp = 0;
             characterData.Battle.isDead = true;
-            onDead?.Invoke();
+            onDead?.Invoke(this);
         }
         else if (characterData.Battle.hp + value >= characterData.Battle.maxHp)
         {
@@ -114,8 +114,6 @@ public class BattleCharacter : MonoBehaviour
         if (characterData.Battle.ap + value <= 0)
         {
             characterData.Battle.ap = 0;
-            //isDead = true;
-            //onDead?.Invoke();
         }
         else if (characterData.Battle.ap + value >= characterData.Battle.maxAp)
         {

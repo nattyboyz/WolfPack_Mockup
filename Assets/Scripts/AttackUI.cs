@@ -17,22 +17,23 @@ public class AttackUI : ListoUI
         Active(false);
     }
 
-    public void Init(BattleCharacter character, BattleController battleCtrl)
+    public void Init(BattleCharacter owner, BattleController battleCtrl)
     {
-        this.owner = character;
+        this.owner = owner;
         this.battleCtrl = battleCtrl;
-        this.skills = owner.Data.Stats.battleSkills;
+        this.skills = this.owner.Data.Stats.battleSkills;
 
-        transform.position = new Vector3(owner.transform.position.x, owner.transform.position.y + 4.5f, owner.transform.position.z);
-
-        ActButton btn;
-        BattleSkillData data;
+        transform.position = new Vector3(this.owner.transform.position.x, this.owner.transform.position.y + 4.5f, this.owner.transform.position.z);
 
         for (int i = 0; i < buttons.Count; i++)
         {
+            ActButton btn;
+            BattleSkillData data;
             if (skills.Length <= i)
             {
-                data = null;
+                //data = null;
+                buttons[i].Hide();
+                continue;
             }
             else
             {
@@ -40,40 +41,54 @@ public class AttackUI : ListoUI
             }
 
             btn = buttons[i] as ActButton;
-            Set(btn, data);//Set button
+            Set(btn, owner, data);//Set button
 
             btn.value = i.ToString();
-            btn.onClick = (value) =>
+
+            if (owner.Data.Battle.ap < data.Ap)
             {
-                unitSelection.onExit = () =>
+                btn.onClick = (b) =>
                 {
-                    Active(true);
+                    var bx = b as ActButton;
+                    bx.Shake();
+                    Debug.Log("<color=red>Not Enough AP!</color>");
                 };
-                unitSelection.onSubmit = (slots) =>
+            }
+            else
+            {
+                btn.onClick = (b) =>
                 {
-                    int idx;
-                    if (int.TryParse(value, out idx))
+                    var bx = b as ActButton;
+                    bx.Focus(false);
+                    unitSelection.onExit = () =>
                     {
-                        owner.Data.Battle.ui_lastAttack = idx;
-                        battleCtrl.ApplyBattleSkill(owner,
-                            slots,
-                            skills[idx]);
-                    }
-                };
-                unitSelection.onSelect = (slots, idx) =>
-                {
-                    foreach (BattleCharacterSlot slot in slots)
-                    {
-                        slot.Character.OverheadUI.Active(true);
-                        unitStatsUI.Show(slot.Character.Data, UnitStatsUIController.Side.Right);
+                        Active(true);
                     };
-                    owner.Data.Battle.ui_lastTarget = idx;
+                    unitSelection.onSubmit = (slots) =>
+                    {
+                        int idx;
+                        if (int.TryParse(b.value, out idx))
+                        {
+                            this.owner.Data.Battle.ui_lastAttack = idx;
+                            battleCtrl.ApplyBattleSkill(this.owner,
+                                slots,
+                                skills[idx]);
+                        }
+                    };
+                    unitSelection.onSelect = (slots, idx) =>
+                    {
+                        foreach (BattleCharacterSlot slot in slots)
+                        {
+                            slot.Character.OverheadUI.Active(true);
+                            unitStatsUI.Show(slot.Character.Data, UnitStatsUIController.Side.Right);
+                        };
+                        this.owner.Data.Battle.ui_lastTarget = idx;
+                    };
+
+                    unitSelection.Active(this.owner,data.TargetOption, this.owner.Data.Battle.ui_lastTarget);
+                    Active(false);
                 };
-
-                unitSelection.Active(TargetMode.Single, owner.Data.Battle.ui_lastTarget);
-                Active(false);
-            };
-
+            }
         }
     }
 
@@ -91,7 +106,7 @@ public class AttackUI : ListoUI
             }
 
             if (selected_index >= 0) buttons[selected_index].Select();
-            else start_selector.Select();
+            //else start_selector.Select();
         }
         else
         {
@@ -100,6 +115,7 @@ public class AttackUI : ListoUI
                 ActButton btn = b as ActButton;
                 btn.allowSubmit = false;
             }
+            page = 0;
         }
         main_canvas.enabled = active;
     }
@@ -125,7 +141,7 @@ public class AttackUI : ListoUI
             if (i + start < c)
             {
                 //btn.Set(skills[i + start]);
-                Set(btn, skills[i + start]);//Set button
+                Set(btn,this.owner, this.skills[i + start]);//Set button
                 btn.value = (i + start).ToString();
                 //buttons[i].Set(data);
             }
@@ -144,23 +160,17 @@ public class AttackUI : ListoUI
         owner.Data.Battle.ui_lastAct = index;
     }
 
-    void Set(ActButton btn, BattleSkillData skillData)
+    void Set(ActButton btn,BattleCharacter character, BattleSkillData skillData)
     {
-        if (skillData == null)
+        btn.Name_txt.text = skillData.SkillName;
+        btn.Sp_txt.text = skillData.Ap.ToString();
+        for (int i = 0; i < btn.Gem_imgs.Length; i++)
         {
-            btn.Hide();
+            btn.Gem_imgs[i].gameObject.SetActive(false);
         }
-        else
-        {
-            btn.Name_txt.text = skillData.SkillName;
-            btn.Sp_txt.text = skillData.Sp.ToString();
-            for (int i = 0; i < btn.Gem_imgs.Length; i++)
-            {
-                btn.Gem_imgs[i].gameObject.SetActive(false);
-            }
-            btn.interactable = true;
-            btn.Main_img.gameObject.SetActive(true);
-        }
-
+        btn.interactable = true;
+        btn.Main_img.gameObject.SetActive(true);
+        btn.EnoughActionPts(skillData.Ap<=character.Data.Battle.ap);
     }
+
 }

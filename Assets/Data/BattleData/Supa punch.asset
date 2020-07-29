@@ -13,9 +13,14 @@ MonoBehaviour:
   m_Name: Supa punch
   m_EditorClassIdentifier: 
   skillName: Supa punch
-  sp: 3
+  ap: 1
   damage:
     min: 15
     max: 20
   lore: SUPApunchuuuuuuuuuuuuu!!
   description: Take gx2 for 2 turn
+  targetOption:
+    mode: 0
+    filter: 2
+    allowSelf: 0
+    selfOnly: 0

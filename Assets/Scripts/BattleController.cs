@@ -36,21 +36,21 @@ public class BattleController : MonoBehaviour
         foreach (BattleCharacter ch in allies)
         {
             ch.Init();
-            //ch.onDead = OnCharacterDead;
+            ch.onDead = OnCharacterDead;
             //ch.onGiveUp = OnCharacterGiveUp;
         }
 
         foreach (BattleCharacter ch in enemies)
         {
             ch.Init();
-            //ch.onDead = OnCharacterDead;
+            ch.onDead = OnCharacterDead;
             //ch.onGiveUp = OnCharacterGiveUp;
         }
     }
 
     public void OnCharacterDead(BattleCharacter b)
     {
-        Debug.Log("OnCharacterDead");
+        Debug.Log(b.Data.Base.C_name + " is dead");
     }
 
     public void OnCharacterGiveUp()
@@ -197,6 +197,11 @@ public class BattleController : MonoBehaviour
 
     void EnterTurn(BattleCharacter character)
     {
+        if(character.Data.Battle.isDead)
+        {
+            SkipTurn();
+            return;
+        }
 
         if(character.Type == Team.Player)
         {
@@ -211,8 +216,12 @@ public class BattleController : MonoBehaviour
             TurnbaseState.TransitionToState(typeof(ExecuteEnemyTurn), character);
             //Enter cpu turn
         }
-        //MoveTurnForward();
-        //RunTurn();
+    }
+
+    void SkipTurn()
+    {
+        MoveTurnForward();
+        ExecuteTurn();
     }
 
     public void MoveTurnForward()
@@ -256,7 +265,7 @@ public class BattleController : MonoBehaviour
         {
             slot.Character.OverheadUI.Active(false);
         }
-        unitSelection.Active(TargetMode.Single, owner.Data.Battle.ui_lastTarget);
+        unitSelection.SelectPrevious();
     }
 
     void OnSubmitGemSlot(Dictionary<int, Gem> gemSlots)
@@ -269,10 +278,22 @@ public class BattleController : MonoBehaviour
         ActSkillData skill, Dictionary<int,Gem> gemSlots)
     {
         yield return new WaitForSeconds(0.2f);
-        yield return owner.CharacterSpine.ieAttack();
+        StartCoroutine(owner.CharacterSpine.ieAttack());
+
+        int count = 0;
         foreach (BattleCharacterSlot slot in targets)
         {
-           yield return slot.Character.ieTakeGemDamage(gemSlots);
+            StartCoroutine(slot.Character.CharacterSpine.ieGetHit());
+            //StartCoroutine(slot.Character.ieTakeGemDamage(gemSlots));
+            if (count == targets.Count - 1)//Consider just the last tween
+            {
+                yield return slot.Character.ieTakeGemDamage(gemSlots);
+            }
+            else
+            {
+                StartCoroutine(slot.Character.ieTakeGemDamage(gemSlots));
+            }
+            count++;
         }
         yield return new WaitForSeconds(0.2f);
         MoveTurnForward();
@@ -314,6 +335,7 @@ public class BattleController : MonoBehaviour
         int count = 0;
         foreach(KeyValuePair<BattleCharacter,BattleOutputData> kvp in processData)
         {
+            StartCoroutine(kvp.Key.CharacterSpine.ieGetHit());
             StartCoroutine(kvp.Key.ieTakeDamage(kvp.Value));
             if (count == processData.Count - 1)//Consider just the last tween
             {
@@ -337,7 +359,8 @@ public class BattleController : MonoBehaviour
       List<BattleCharacterSlot> targets,
       BattleSkillData skill)
     {
-        yield return owner.CharacterSpine.ieAttack();
+        StartCoroutine(owner.CharacterSpine.ieAttack());
+        yield return null;
     }
 
    void ProcessAttack(BattleCharacter owner,
