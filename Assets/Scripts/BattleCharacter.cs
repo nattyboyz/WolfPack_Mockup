@@ -40,16 +40,23 @@ public class BattleCharacter : MonoBehaviour
 
     public void Focus(bool active)
     {
-        overheadUI.Active(active);
+        //overheadUI.Active(active);
         float sign = Mathf.Sign(graphic.transform.localScale.x);
         if (active)
         {
-          
-            graphic.transform.localScale = new Vector3(graphic.transform.localScale.x + (sign*0.1f), graphic.transform.localScale.y +  0.1f, 1f);
+            Debug.Log("Focus true");
+            //graphic.transform.localScale = new Vector3(graphic.transform.localScale.x + (sign*0.1f), graphic.transform.localScale.y +  0.1f, 1f);
+            overheadUI.Parent.transform.localScale = 
+                new Vector3(overheadUI.Parent.transform.localScale.x + (0.2f),
+                overheadUI.Parent.transform.localScale.y + (0.2f), 1f);
         }
         else
         {
-            graphic.transform.localScale = new Vector3(graphic.transform.localScale.x - (sign * 0.1f), graphic.transform.localScale.y -  0.1f, 1f);
+            Debug.Log("Focus false");
+            //graphic.transform.localScale = new Vector3(graphic.transform.localScale.x - (sign * 0.1f), graphic.transform.localScale.y -  0.1f, 1f);
+            overheadUI.Parent.transform.localScale = 
+                new Vector3(overheadUI.Parent.transform.localScale.x - (0.2f),
+                overheadUI.Parent.transform.localScale.y - (0.2f), 1f);
         }
     }
 

@@ -15,7 +15,7 @@ public class DiamondPreview : MonoBehaviour
     [SerializeField] Gem[] gemData;
     [SerializeField] Dictionary<int,Gem> gemSlots = new Dictionary<int, Gem>();
     public Action<Dictionary<int, Gem>> onSubmit;
-    public Action onCancel;
+    public Action onExit;
 
     [SerializeField] UnityEvent activeEvent;
     [SerializeField] UnityEvent deactivateEvent;
@@ -95,12 +95,18 @@ public class DiamondPreview : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
             {
-                Debug.Log("Back");
-                onCancel?.Invoke();
-                HidePreviewGems();
-                Active(false);
+                Debug.Log("Exit");
+                StartCoroutine(ieExit());
             }
         }
+    }
+
+    public IEnumerator ieExit()
+    {
+        HidePreviewGems();
+        Active(false);
+        yield return new WaitForSeconds(0.2f);
+        onExit?.Invoke();
     }
 
     public void HidePreviewGems()

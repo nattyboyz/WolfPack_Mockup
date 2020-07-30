@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: Bully
   ap: 3
   gems: 0100000001000000
-  lore: ....
-  description: Take rx2 damage
+  lore: Yo mama!
+  description: Deals <style=gem_r><style=gem_r> damages
   targetOption:
     mode: 0
     filter: 2

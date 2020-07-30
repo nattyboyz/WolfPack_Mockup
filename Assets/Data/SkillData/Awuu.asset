@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: Awuu
   ap: 1
   gems: 030000000100000004000000
-  lore: Awuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
-  description: Take bx1 rx1 gx1
+  lore: Awuuuuuuuuuuuuuuuuuuuuuuuuuu.............
+  description: Give allie <style=gem_r><style=gem_b><style=gem_g>
   targetOption:
     mode: 0
     filter: 1

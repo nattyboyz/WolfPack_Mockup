@@ -53,13 +53,14 @@ public class ListoUI : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
         {
-            onExit?.Invoke();
+            StartCoroutine(ieExit());
         }
     }
 
-    public IEnumerator ieExit()
-    {
-        yield return new WaitForSeconds(0.2f);
+    protected virtual IEnumerator ieExit()
+    { 
+        //yield return new WaitForSeconds(0.2f);
+        yield return new WaitForEndOfFrame();
         onExit?.Invoke();
     }
 

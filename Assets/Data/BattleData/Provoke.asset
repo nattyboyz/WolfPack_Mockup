@@ -17,8 +17,8 @@ MonoBehaviour:
   damage:
     min: 0
     max: 0
-  lore: Take next damage for ally
-  description: Take next damage for ally
+  lore: Real one stand their ground.
+  description: Take next damage from enemy
   targetOption:
     mode: 0
     filter: 1

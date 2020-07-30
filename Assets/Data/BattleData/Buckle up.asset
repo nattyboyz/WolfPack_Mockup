@@ -17,8 +17,8 @@ MonoBehaviour:
   damage:
     min: 0
     max: 0
-  lore: this is a very powerful skill
-  description: Take gx2 for 2 turn
+  lore: Cici
+  description: -50% damage taken [2 turns]
   targetOption:
     mode: 0
     filter: 1

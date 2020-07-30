@@ -90,7 +90,8 @@ public class UnitSelection : MonoBehaviour
 
     public IEnumerator ieExit()
     {
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0.2f);
+        yield return new WaitForEndOfFrame();
         onExit?.Invoke();
     }
 
@@ -224,7 +225,7 @@ public class UnitSelection : MonoBehaviour
         if (target == null) return false;
         if (target.Data.Battle.isDead) return false;
 
-        Debug.Log("[Match] " + owner.name + " " + target.name + option.selfOnly + " " + option.allowSelf);
+        //Debug.Log("[Match] " + owner.name + " " + target.name + option.selfOnly + " " + option.allowSelf);
 
         if (option.selfOnly) {
             if (target == owner) return true;

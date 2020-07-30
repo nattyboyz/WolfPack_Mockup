@@ -16,6 +16,9 @@ public class BattleController : MonoBehaviour
     [SerializeField] ActUI actUI;
     [SerializeField] AttackUI attackUI;
 
+    //public InvokationUI invokeUI;
+    [SerializeField] SkillInfoUI skillInfo;
+
     [SerializeField] List<BattleCharacter> allies;//0 1 2
     [SerializeField] List<BattleCharacter> enemies;//3 4 5
 
@@ -71,9 +74,9 @@ public class BattleController : MonoBehaviour
             unitStatsUI.Clear(UnitStatsUIController.Side.Left);
         }
 
-        if (current_character!=null)current_character.Focus(false);
+        //if (current_character!=null)current_character.Focus(false);
         current_character = character;
-        character.Focus(true);
+        //character.Focus(true);
         //character.OverheadUI.gameObject.SetActive(true);
     }
 
@@ -81,7 +84,7 @@ public class BattleController : MonoBehaviour
     {
         if (character == current_character)
         {
-            target_character.Focus(false);
+            //target_character.Focus(false);
             target_character = null;
             if(character.Type == Team.Player)
                 unitStatsUI.Clear(UnitStatsUIController.Side.Right);
@@ -152,24 +155,37 @@ public class BattleController : MonoBehaviour
                 attackUI.Init(character, this);
                 attackUI.Active(true);
                 actionUI.Active(false);
+                foreach(BattleCharacter chara in turns)
+                {
+                    if(!chara.Data.Battle.isDead)
+                        chara.OverheadUI.Active(true);
+                    else chara.OverheadUI.Active(false);
+                }
+
             }
             else if (code == "Act")
             {
                 actUI.Init(character, this);
                 actUI.Active(true);
                 actionUI.Active(false);
+                foreach (BattleCharacter chara in turns)
+                {
+                    if (!chara.Data.Battle.isDead)
+                        chara.OverheadUI.Active(true);
+                    else chara.OverheadUI.Active(false);
+                }
             }
             else if (code == "Item")
             {
-                actUI.Init(character, this);
-                actUI.Active(true);
-                actionUI.Active(false);
+                //actUI.Init(character, this);
+                //actUI.Active(true);
+                //actionUI.Active(false);
             }
             else if (code == "Skip")
             {
-                actUI.Init(character, this);
-                actUI.Active(true);
-                actionUI.Active(false);
+                //actUI.Init(character, this);
+                //actUI.Active(true);
+                //actionUI.Active(false);
             }
         };
     
@@ -179,6 +195,11 @@ public class BattleController : MonoBehaviour
        
             actionUI.SetPosition(character.transform.position);
             actionUI.Active(true);
+
+            foreach (BattleCharacter chara in turns)
+            {
+                chara.OverheadUI.Active(false);
+            }
         };
 
         actUI.onExit = () =>
@@ -187,6 +208,11 @@ public class BattleController : MonoBehaviour
          
             actionUI.SetPosition(character.transform.position);
             actionUI.Active(true);
+
+            foreach (BattleCharacter chara in turns)
+            {
+                chara.OverheadUI.Active(false);
+            }
         };
 
         actionUI.SetPosition(character.transform.position);
@@ -250,7 +276,7 @@ public class BattleController : MonoBehaviour
             {
                 s += slot.Character.Data.Base.C_name +", ";
             }
-            slot.Character.OverheadUI.Active(true);
+            //slot.Character.OverheadUI.Active(true);
             slot.Character.OverheadUI.ChooseGemSlot(skill.Gems, OnSubmitGemSlot, OnCancelGemSelection);
         }
 
@@ -261,11 +287,13 @@ public class BattleController : MonoBehaviour
 
     void OnCancelGemSelection()
     {
-        foreach (BattleCharacterSlot slot in targets)
-        {
-            slot.Character.OverheadUI.Active(false);
-        }
+        //foreach (BattleCharacterSlot slot in targets)
+        //{
+        //    slot.Character.OverheadUI.Active(false);
+        //}
         unitSelection.SelectPrevious();
+        skillInfo.Active(true);
+        //invokeUI.Active(true);
     }
 
     void OnSubmitGemSlot(Dictionary<int, Gem> gemSlots)
@@ -298,10 +326,15 @@ public class BattleController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         MoveTurnForward();
         ExecuteTurn();
-        foreach (BattleCharacterSlot slot in targets)
+        //foreach (BattleCharacterSlot slot in targets)
+        //{
+        //    slot.Character.OverheadUI.Active(false);
+        //}
+        foreach (BattleCharacter chara in turns)
         {
-            slot.Character.OverheadUI.Active(false);
+            chara.OverheadUI.Active(false);
         }
+
     }
 
     public void ApplyBattleSkill(BattleCharacter owner,
@@ -309,10 +342,10 @@ public class BattleController : MonoBehaviour
       BattleSkillData skill)
     {
         // string s = "";
-        foreach (BattleCharacterSlot slot in targets)
-        {
-            slot.Character.OverheadUI.Active(true);
-        }
+        //foreach (BattleCharacterSlot slot in targets)
+        //{
+        //    slot.Character.OverheadUI.Active(true);
+        //}
         StartCoroutine(ieExecuteBattleSkill(owner, targets, skill));
         //Debug.Log("[BattleCrtl]: [" + owner.Data.Base.c_name +
         //    "] apply battle skill <b>[" +
@@ -346,11 +379,14 @@ public class BattleController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //Post attack
         yield return iePostAttack(owner, postData);
-        foreach (BattleCharacterSlot slot in targets)
+        //foreach (BattleCharacterSlot slot in targets)
+        //{
+        //    slot.Character.OverheadUI.Active(false);
+        //}
+        foreach (BattleCharacter chara in turns)
         {
-            slot.Character.OverheadUI.Active(false);
+            chara.OverheadUI.Active(false);
         }
-
         MoveTurnForward();
         ExecuteTurn();
     }

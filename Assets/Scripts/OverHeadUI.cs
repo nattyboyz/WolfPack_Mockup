@@ -8,10 +8,12 @@ public class OverHeadUI : MonoBehaviour
     [SerializeField] HpUI hpUi;
     [SerializeField] DiamondUI diamondUi;
     [SerializeField] DiamondPreview diamondSelection;
+    [SerializeField] RectTransform parent;
 
     public DiamondUI DiamondUi { get => diamondUi; }
     public DiamondPreview DiamondSelection { get => diamondSelection;}
     public HpUI HpUi { get => hpUi;}
+    public RectTransform Parent { get => parent; set => parent = value; }
 
     public void Active(bool value)
     {
@@ -43,7 +45,7 @@ public class OverHeadUI : MonoBehaviour
         Action<Dictionary<int, Gem>> onSubmit, 
         Action onCancel)
     {
-        diamondSelection.onCancel = onCancel;
+        diamondSelection.onExit = onCancel;
         diamondSelection.onSubmit = onSubmit;
         diamondSelection.StartChoose(gemTypes, 0);
         diamondSelection.Active(true);

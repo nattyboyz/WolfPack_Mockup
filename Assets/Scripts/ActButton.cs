@@ -144,4 +144,19 @@ public class ActButton : ListoButton
             sp_img.color = apNotEnough;
         }
     }
+
+    public void SetAp(int ap)
+    {
+        if (ap <= 0)
+        {
+            sp_img.gameObject.SetActive(false);
+            //main_img.gameObject.SetActive(false);
+        }
+        else
+        {
+            //main_img.gameObject.SetActive(true);
+            sp_img.gameObject.SetActive(true);
+            sp_txt.text = ap.ToString();
+        }
+    }
 }

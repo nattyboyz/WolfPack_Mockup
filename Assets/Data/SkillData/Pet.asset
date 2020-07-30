@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: Pet
   ap: 1
   gems: 04000000
-  lore: this is a very powerful skill
-  description: Take gx2 for 2 turn
+  lore: This is a very powerful skill
+  description: Deals <style=gem_g>
   targetOption:
     mode: 0
     filter: 3

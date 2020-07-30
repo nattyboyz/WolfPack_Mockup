@@ -11,6 +11,7 @@ public class AttackUI : ListoUI
 
     [SerializeField] BattleCharacter owner;
     [SerializeField] BattleController battleCtrl;
+    [SerializeField] SkillInfoUI skillInfo;
 
     protected override void Start()
     {
@@ -25,11 +26,14 @@ public class AttackUI : ListoUI
 
         transform.position = new Vector3(this.owner.transform.position.x, this.owner.transform.position.y + 4.5f, this.owner.transform.position.z);
 
+        ActButton btn;
+        BattleSkillData data;
+
         for (int i = 0; i < buttons.Count; i++)
         {
-            ActButton btn;
-            BattleSkillData data;
-            if (skills.Length <= i)
+            int skillIDX = i + (button_per_page * page);
+
+            if (skills.Length <= skillIDX)
             {
                 //data = null;
                 buttons[i].Hide();
@@ -37,13 +41,13 @@ public class AttackUI : ListoUI
             }
             else
             {
-                data = skills[i];
+                data = skills[skillIDX];
             }
 
             btn = buttons[i] as ActButton;
             Set(btn, owner, data);//Set button
 
-            btn.value = i.ToString();
+            btn.value = skillIDX.ToString();
 
             if (owner.Data.Battle.ap < data.Ap)
             {
@@ -59,13 +63,16 @@ public class AttackUI : ListoUI
                 btn.onClick = (b) =>
                 {
                     var bx = b as ActButton;
+                    var skill = this.owner.Data.Stats.battleSkills[int.Parse(bx.value)];
                     bx.Focus(false);
                     unitSelection.onExit = () =>
                     {
+                        skillInfo.Active(false);
                         Active(true);
                     };
                     unitSelection.onSubmit = (slots) =>
                     {
+                        skillInfo.Active(false);
                         int idx;
                         if (int.TryParse(b.value, out idx))
                         {
@@ -79,16 +86,20 @@ public class AttackUI : ListoUI
                     {
                         foreach (BattleCharacterSlot slot in slots)
                         {
-                            slot.Character.OverheadUI.Active(true);
+                            //slot.Character.OverheadUI.Active(true);
                             unitStatsUI.Show(slot.Character.Data, UnitStatsUIController.Side.Right);
                         };
                         this.owner.Data.Battle.ui_lastTarget = idx;
                     };
-
-                    unitSelection.Active(this.owner,data.TargetOption, this.owner.Data.Battle.ui_lastTarget);
+                    Debug.Log("<color=red>" + skill.SkillName + "</color>");
+                    unitSelection.Active(this.owner,skill.TargetOption, this.owner.Data.Battle.ui_lastTarget);
                     Active(false);
+                    skillInfo.Set(skill);
+                    skillInfo.Active(true);
                 };
+
             }
+
         }
     }
 
@@ -154,16 +165,39 @@ public class AttackUI : ListoUI
         page = target;
     }
 
+    public override void Page(int page)
+    {
+        int maxP = Mathf.FloorToInt((float)skills.Length / (float)button_per_page);
+        this.page = page;
+        ActButton btn;
+        int start = button_per_page * page;
+        for (int i = 0; i < button_per_page; i++)
+        {
+            btn = buttons[i] as ActButton;
+            if (i + start < skills.Length)
+            {
+                Set(btn, this.owner, skills[i + start]);
+                btn.value = (i + start).ToString();
+            }
+            else
+            {
+                buttons[i].Hide();
+            }
+        }
+    }
+
     public override void Select(int index)
     {
         base.Select(index);
-        owner.Data.Battle.ui_lastAct = index;
+        owner.Data.Battle.ui_lastAttack = index;
     }
 
     void Set(ActButton btn,BattleCharacter character, BattleSkillData skillData)
     {
+        //if (skillData.Ap <= 0) btn.Sp_img.gameObject.
         btn.Name_txt.text = skillData.SkillName;
-        btn.Sp_txt.text = skillData.Ap.ToString();
+        //btn.Sp_txt.text = skillData.Ap.ToString();
+        btn.SetAp(skillData.Ap);
         for (int i = 0; i < btn.Gem_imgs.Length; i++)
         {
             btn.Gem_imgs[i].gameObject.SetActive(false);
@@ -173,4 +207,9 @@ public class AttackUI : ListoUI
         btn.EnoughActionPts(skillData.Ap<=character.Data.Battle.ap);
     }
 
+    //protected override IEnumerator ieExit()
+    //{
+    //    //skillInfo.Active(false);
+    //    return base.ieExit();
+    //}
 }

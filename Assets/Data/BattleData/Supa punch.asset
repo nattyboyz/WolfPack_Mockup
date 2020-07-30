@@ -18,7 +18,7 @@ MonoBehaviour:
     min: 15
     max: 20
   lore: SUPApunchuuuuuuuuuuuuu!!
-  description: Take gx2 for 2 turn
+  description: Deals 15-20 damage
   targetOption:
     mode: 0
     filter: 2

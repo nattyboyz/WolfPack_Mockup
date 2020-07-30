@@ -15,8 +15,8 @@ MonoBehaviour:
   skillName: Bad joke
   ap: 1
   gems: 01000000
-  lore: What!? not funny enough?
-  description: Take rx1 damage
+  lore: '"What!? not funny enough?"'
+  description: Deal <style=gem_r> damage
   targetOption:
     mode: 0
     filter: 2

@@ -18,7 +18,7 @@ MonoBehaviour:
     min: 9
     max: 14
   lore: this is a very powerful skill
-  description: Take gx2 for 2 turn
+  description: Deals 9-14 damage
   targetOption:
     mode: 0
     filter: 2
