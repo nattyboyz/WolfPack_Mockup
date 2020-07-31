@@ -94,20 +94,15 @@ public class ActUI : ListoUI
                         //battleCtrl.invokeUI.Active(false);
                         if (int.TryParse(b.value, out idx))
                         {
-                            this.owner.Data.Battle.ui_lastAttack = idx;
-                            battleCtrl.ApplyActSkill(this.owner,
-                                slots,
-                                skills[idx]);
+                            battleCtrl.ApplyActSkill(this.owner, slots,idx);
                         }
                     };
                     unitSelection.onSelect = (slots, idx) =>
                     {
                         foreach (BattleCharacterSlot slot in slots)
                         {
-                            //slot.Character.OverheadUI.Active(true);
-                            unitStatsUI.Show(slot.Character.Data, UnitStatsUIController.Side.Right);
+                            battleCtrl.SetTargetCharacter(owner, slot.Character, idx);
                         };
-                        this.owner.Data.Battle.ui_lastTarget = idx;
                     };
 
                     Debug.Log("<color=red>" + this.owner.Data.Stats.actSkills[int.Parse(bx.value)].SkillName+ "</color>");

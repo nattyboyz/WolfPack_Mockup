@@ -24,7 +24,7 @@ public class AttackUI : ListoUI
         this.battleCtrl = battleCtrl;
         this.skills = this.owner.Data.Stats.battleSkills;
 
-        transform.position = new Vector3(this.owner.transform.position.x, this.owner.transform.position.y + 4.5f, this.owner.transform.position.z);
+        transform.position = new Vector3(owner.transform.position.x, owner.transform.position.y + 4.5f, owner.transform.position.z);
 
         ActButton btn;
         BattleSkillData data;
@@ -76,20 +76,15 @@ public class AttackUI : ListoUI
                         int idx;
                         if (int.TryParse(b.value, out idx))
                         {
-                            this.owner.Data.Battle.ui_lastAttack = idx;
-                            battleCtrl.ApplyBattleSkill(this.owner,
-                                slots,
-                                skills[idx]);
+                            battleCtrl.ApplyBattleSkill(this.owner, slots, idx);
                         }
                     };
                     unitSelection.onSelect = (slots, idx) =>
                     {
                         foreach (BattleCharacterSlot slot in slots)
                         {
-                            //slot.Character.OverheadUI.Active(true);
-                            unitStatsUI.Show(slot.Character.Data, UnitStatsUIController.Side.Right);
+                            battleCtrl.SetTargetCharacter(owner, slot.Character, idx);
                         };
-                        this.owner.Data.Battle.ui_lastTarget = idx;
                     };
                     Debug.Log("<color=red>" + skill.SkillName + "</color>");
                     unitSelection.Active(this.owner,skill.TargetOption, this.owner.Data.Battle.ui_lastTarget);
@@ -189,7 +184,7 @@ public class AttackUI : ListoUI
     public override void Select(int index)
     {
         base.Select(index);
-        owner.Data.Battle.ui_lastAttack = index;
+        this.owner.Data.Battle.ui_lastAttack = index;
     }
 
     void Set(ActButton btn,BattleCharacter character, BattleSkillData skillData)
@@ -207,9 +202,4 @@ public class AttackUI : ListoUI
         btn.EnoughActionPts(skillData.Ap<=character.Data.Battle.ap);
     }
 
-    //protected override IEnumerator ieExit()
-    //{
-    //    //skillInfo.Active(false);
-    //    return base.ieExit();
-    //}
 }

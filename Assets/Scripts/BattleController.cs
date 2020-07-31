@@ -16,14 +16,11 @@ public class BattleController : MonoBehaviour
     [SerializeField] ActUI actUI;
     [SerializeField] AttackUI attackUI;
 
-    //public InvokationUI invokeUI;
     [SerializeField] SkillInfoUI skillInfo;
 
     [SerializeField] List<BattleCharacter> allies;//0 1 2
     [SerializeField] List<BattleCharacter> enemies;//3 4 5
-
     [SerializeField] List<BattleCharacter> turns;
-    //bool is_runnning = false; 
 
     StateMachine turnbaseState;
     public StateMachine TurnbaseState { get => turnbaseState; set => turnbaseState = value; }
@@ -31,7 +28,6 @@ public class BattleController : MonoBehaviour
     public void Init()
     {
         turnbaseState = new StateMachine();
-        //unitSelection.InitSelection();
 
         turnbaseState.AddState(new ExecuteEnemyTurn(this));
         turnbaseState.AddState(new ExecutePlayerTurn(this));
@@ -40,14 +36,12 @@ public class BattleController : MonoBehaviour
         {
             ch.Init();
             ch.onDead = OnCharacterDead;
-            //ch.onGiveUp = OnCharacterGiveUp;
         }
 
         foreach (BattleCharacter ch in enemies)
         {
             ch.Init();
             ch.onDead = OnCharacterDead;
-            //ch.onGiveUp = OnCharacterGiveUp;
         }
     }
 
@@ -63,44 +57,37 @@ public class BattleController : MonoBehaviour
 
     public void SetCurrentCharacter(BattleCharacter character)
     {
+        Debug.Log("Set current character " + character.Data.Base.C_name);
         if (character.Type == Team.Player)
         {
             unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Left);
-            unitStatsUI.Clear(UnitStatsUIController.Side.Right);
+            unitStatsUI.Hide(UnitStatsUIController.Side.Right);
         }
         else//CPU
         {
             unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Right);
-            unitStatsUI.Clear(UnitStatsUIController.Side.Left);
+            unitStatsUI.Hide(UnitStatsUIController.Side.Left);
         }
-
-        //if (current_character!=null)current_character.Focus(false);
         current_character = character;
-        //character.Focus(true);
-        //character.OverheadUI.gameObject.SetActive(true);
     }
 
-    public void SetTargetCharacter(BattleCharacter character)
+    public void SetTargetCharacter(BattleCharacter owner, BattleCharacter target,int index)
     {
-        if (character == current_character)
+        owner.Data.Battle.ui_lastTarget = index;
+
+        if (target == owner)
         {
-            //target_character.Focus(false);
-            target_character = null;
-            if(character.Type == Team.Player)
-                unitStatsUI.Clear(UnitStatsUIController.Side.Right);
+            if (target.Type == Team.Player)
+                unitStatsUI.Hide(UnitStatsUIController.Side.Right);
             else
-                unitStatsUI.Clear(UnitStatsUIController.Side.Left);
+                unitStatsUI.Hide(UnitStatsUIController.Side.Left);
         }
         else
         {
-            unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Right);
-            if(target_character!=null) target_character.Focus(false);
-            target_character = character;
-
-            if (current_character.Type == Team.Player)
-                unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Right);
+            if (owner.Type == Team.Player)
+                unitStatsUI.Show(target.Data, UnitStatsUIController.Side.Right);
             else
-                unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Left);
+                unitStatsUI.Show(target.Data, UnitStatsUIController.Side.Left);
         }
     }
 
@@ -136,14 +123,10 @@ public class BattleController : MonoBehaviour
     }
 
     int currentTurn = 0;
+
     public void ExecuteTurn()
     {
-        //BattleCharacter character = turns[currentTurn];
-        //if (is_runnning) return;
-        //is_runnning = true;
-        SetCurrentCharacter(turns[currentTurn]);
         EnterTurn(turns[currentTurn]);
-        //unitStatsUI.Clear(UnitStatsUIController.Side.Right);
     }
 
     public void ShowActionUI(BattleCharacter character)
@@ -225,11 +208,13 @@ public class BattleController : MonoBehaviour
     {
         if(character.Data.Battle.isDead)
         {
-            SkipTurn();
+            EndTurn();
             return;
         }
 
-        if(character.Type == Team.Player)
+        SetCurrentCharacter(turns[currentTurn]);
+
+        if (character.Type == Team.Player)
         {
             //Enter allie turn
 
@@ -244,7 +229,7 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    void SkipTurn()
+    void EndTurn()
     {
         MoveTurnForward();
         ExecuteTurn();
@@ -256,49 +241,33 @@ public class BattleController : MonoBehaviour
         if (currentTurn >= turns.Count) currentTurn = 0;
     }
 
-    BattleCharacter owner;
     List<BattleCharacterSlot> targets;
     ActSkillData skill;
 
     public void ApplyActSkill(BattleCharacter owner,
         List<BattleCharacterSlot> targets,
-        ActSkillData skill
+        int index
         )
     {
-        string s = "";
-        this.owner = owner;
         this.targets = targets;
-        this.skill = skill;
+        owner.Data.Battle.ui_lastAct = index;
+        this.skill = owner.Data.Stats.actSkills[index];
 
         foreach (BattleCharacterSlot slot in targets)
         {
-            if (slot.Character != null)
-            {
-                s += slot.Character.Data.Base.C_name +", ";
-            }
-            //slot.Character.OverheadUI.Active(true);
             slot.Character.OverheadUI.ChooseGemSlot(skill.Gems, OnSubmitGemSlot, OnCancelGemSelection);
         }
-
-        Debug.Log("[BattleCrtl]: ["+ owner.Data.Base.C_name +
-            "] apply skill <b>[" + 
-            skill.SkillName+ "]</b> to " + s);
     }
 
     void OnCancelGemSelection()
     {
-        //foreach (BattleCharacterSlot slot in targets)
-        //{
-        //    slot.Character.OverheadUI.Active(false);
-        //}
         unitSelection.SelectPrevious();
         skillInfo.Active(true);
-        //invokeUI.Active(true);
     }
 
     void OnSubmitGemSlot(Dictionary<int, Gem> gemSlots)
     {
-        StartCoroutine(ieExecuteActSkill(owner,targets,skill,gemSlots));
+        StartCoroutine(ieExecuteActSkill(current_character,targets,skill,gemSlots));
     }
 
     IEnumerator ieExecuteActSkill(BattleCharacter owner,
@@ -326,37 +295,28 @@ public class BattleController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         MoveTurnForward();
         ExecuteTurn();
-        //foreach (BattleCharacterSlot slot in targets)
-        //{
-        //    slot.Character.OverheadUI.Active(false);
-        //}
+
         foreach (BattleCharacter chara in turns)
         {
             chara.OverheadUI.Active(false);
         }
 
+        unitStatsUI.Hide(UnitStatsUIController.Side.Right);
     }
 
     public void ApplyBattleSkill(BattleCharacter owner,
       List<BattleCharacterSlot> targets,
-      BattleSkillData skill)
+      int index)
     {
-        // string s = "";
-        //foreach (BattleCharacterSlot slot in targets)
-        //{
-        //    slot.Character.OverheadUI.Active(true);
-        //}
+        owner.Data.Battle.ui_lastAttack = index;
+        BattleSkillData skill = owner.Data.Stats.battleSkills[index];
         StartCoroutine(ieExecuteBattleSkill(owner, targets, skill));
-        //Debug.Log("[BattleCrtl]: [" + owner.Data.Base.c_name +
-        //    "] apply battle skill <b>[" +
-        //    skill.SkillName + "]</b> to " + s);
     }
 
     IEnumerator ieExecuteBattleSkill(BattleCharacter owner,
        List<BattleCharacterSlot> targets,
        BattleSkillData skill)
     {
-     
         yield return new WaitForSeconds(0.2f);//This is delay..
         //Pre attack: duration depend on attack animation...
         yield return iePreAttack(owner, targets, skill);
@@ -379,21 +339,18 @@ public class BattleController : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //Post attack
         yield return iePostAttack(owner, postData);
-        //foreach (BattleCharacterSlot slot in targets)
-        //{
-        //    slot.Character.OverheadUI.Active(false);
-        //}
+
         foreach (BattleCharacter chara in turns)
         {
             chara.OverheadUI.Active(false);
         }
         MoveTurnForward();
         ExecuteTurn();
+
+        unitStatsUI.Hide(UnitStatsUIController.Side.Right);
     }
 
-    IEnumerator iePreAttack(BattleCharacter owner,
-      List<BattleCharacterSlot> targets,
-      BattleSkillData skill)
+    IEnumerator iePreAttack(BattleCharacter owner, List<BattleCharacterSlot> targets, BattleSkillData skill)
     {
         StartCoroutine(owner.CharacterSpine.ieAttack());
         yield return null;
@@ -431,13 +388,8 @@ public class BattleController : MonoBehaviour
        
     }
 
-    float Calculate(
-        BattleCharacter owner, 
-        BattleCharacter target,
-        BattleSkillData skill)
+    float Calculate(BattleCharacter owner, BattleCharacter target, BattleSkillData skill)
     {
-        //KeyValuePair<BattleCharacter, BattleOutputData> data = 
-        //    new KeyValuePair<BattleCharacter, BattleOutputData>();
         return skill.Damage.max;
     }
 
@@ -458,7 +410,6 @@ public class BattleController : MonoBehaviour
         }
         yield return new WaitForSeconds(0.2f);
     }
-
 }
 
 public class BattleOutputData

@@ -22,7 +22,7 @@ public class UnitStatsUIController : MonoBehaviour
         }
     }
 
-    public void Clear(Side side)
+    public void Hide(Side side)
     {
         if (side == Side.Left)
         {
