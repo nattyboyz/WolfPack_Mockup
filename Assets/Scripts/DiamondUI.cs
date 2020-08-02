@@ -34,7 +34,7 @@ public class DiamondUI : MonoBehaviour
     }
 
     //Set gem with animation@!
-    public IEnumerator ieSetGems(Dictionary<int, Gem> gemSlots)
+    public IEnumerator ieModifyGems(Dictionary<int, Gem> gemSlots)
     {
         List<int> ind = new List<int>();
         foreach (KeyValuePair<int, Gem> kvp in gemSlots)
@@ -74,7 +74,7 @@ public class DiamondUI : MonoBehaviour
 
     public IEnumerator ieSetGemsBreak(Dictionary<int, Gem> gemSlots)
     {
-        yield return ieSetGems(gemSlots);
+        yield return ieModifyGems(gemSlots);
         //yield return
         
     }

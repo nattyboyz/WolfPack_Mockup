@@ -8,18 +8,19 @@ public class UnitStatsUIController : MonoBehaviour
     [SerializeField] UnitStatsUI leftUI;
     [SerializeField] UnitStatsUI rightUI;
 
-    public void Show(CharacterData data, Side side)
+    public void Show(BattleCharacter character, Side side)
     {
         if(side == Side.Left)
         {
             leftUI.gameObject.SetActive(true);
-            leftUI.SetData(data);
+            leftUI.Set(character);
         }
         else
         {
             rightUI.gameObject.SetActive(true);
-            rightUI.SetData(data);
+            rightUI.Set(character);
         }
+        Debug.Log("Show [] " + character.Data.Base.C_name);
     }
 
     public void Hide(Side side)
@@ -32,6 +33,7 @@ public class UnitStatsUIController : MonoBehaviour
         {
             rightUI.gameObject.SetActive(false);
         }
+        Debug.Log("<color=red>Hide</color> []" + side.ToString());
     }
 
     public void AddGem(Side side,int slot, Gem gemType)

@@ -60,12 +60,12 @@ public class BattleController : MonoBehaviour
         Debug.Log("Set current character " + character.Data.Base.C_name);
         if (character.Type == Team.Player)
         {
-            unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Left);
+            unitStatsUI.Show(character, UnitStatsUIController.Side.Left);
             unitStatsUI.Hide(UnitStatsUIController.Side.Right);
         }
         else//CPU
         {
-            unitStatsUI.Show(character.Data, UnitStatsUIController.Side.Right);
+            unitStatsUI.Show(character, UnitStatsUIController.Side.Right);
             unitStatsUI.Hide(UnitStatsUIController.Side.Left);
         }
         current_character = character;
@@ -85,9 +85,9 @@ public class BattleController : MonoBehaviour
         else
         {
             if (owner.Type == Team.Player)
-                unitStatsUI.Show(target.Data, UnitStatsUIController.Side.Right);
+                unitStatsUI.Show(target, UnitStatsUIController.Side.Right);
             else
-                unitStatsUI.Show(target.Data, UnitStatsUIController.Side.Left);
+                unitStatsUI.Show(target, UnitStatsUIController.Side.Left);
         }
     }
 
@@ -284,24 +284,27 @@ public class BattleController : MonoBehaviour
             //StartCoroutine(slot.Character.ieTakeGemDamage(gemSlots));
             if (count == targets.Count - 1)//Consider just the last tween
             {
-                yield return slot.Character.ieTakeGemDamage(gemSlots);
+                yield return slot.Character.ieModifyGems(gemSlots);
             }
             else
             {
-                StartCoroutine(slot.Character.ieTakeGemDamage(gemSlots));
+                StartCoroutine(slot.Character.ieModifyGems(gemSlots));
             }
             count++;
         }
         yield return new WaitForSeconds(0.2f);
-        MoveTurnForward();
-        ExecuteTurn();
 
         foreach (BattleCharacter chara in turns)
         {
             chara.OverheadUI.Active(false);
         }
 
-        unitStatsUI.Hide(UnitStatsUIController.Side.Right);
+        MoveTurnForward();
+        ExecuteTurn();
+
+
+
+       // unitStatsUI.Hide(UnitStatsUIController.Side.Right);
     }
 
     public void ApplyBattleSkill(BattleCharacter owner,
@@ -321,15 +324,15 @@ public class BattleController : MonoBehaviour
         //Pre attack: duration depend on attack animation...
         yield return iePreAttack(owner, targets, skill);
         //Process attack
-        Dictionary<BattleCharacter, BattleOutputData> processData;
+        Dictionary<BattleCharacter, HpModifierData> processData;
         Dictionary<BattleCharacter, Dictionary<PostEffectType, int>> postData;
         ProcessAttack(owner, targets, skill,out processData, out postData);
 
         int count = 0;
-        foreach(KeyValuePair<BattleCharacter,BattleOutputData> kvp in processData)
+        foreach(KeyValuePair<BattleCharacter,HpModifierData> kvp in processData)
         {
             StartCoroutine(kvp.Key.CharacterSpine.ieGetHit());
-            StartCoroutine(kvp.Key.ieTakeDamage(kvp.Value));
+            StartCoroutine(kvp.Key.ieModifyHp(kvp.Value));
             if (count == processData.Count - 1)//Consider just the last tween
             {
                 yield return kvp.Key.OverheadUI.HpUi.HpTween.WaitForCompletion();
@@ -347,7 +350,7 @@ public class BattleController : MonoBehaviour
         MoveTurnForward();
         ExecuteTurn();
 
-        unitStatsUI.Hide(UnitStatsUIController.Side.Right);
+       // unitStatsUI.Hide(UnitStatsUIController.Side.Right);
     }
 
     IEnumerator iePreAttack(BattleCharacter owner, List<BattleCharacterSlot> targets, BattleSkillData skill)
@@ -359,18 +362,18 @@ public class BattleController : MonoBehaviour
    void ProcessAttack(BattleCharacter owner,
           List<BattleCharacterSlot> targets,
           BattleSkillData skill, 
-          out Dictionary<BattleCharacter, BattleOutputData> processData,
+          out Dictionary<BattleCharacter, HpModifierData> processData,
           out Dictionary<BattleCharacter, Dictionary<PostEffectType, int>> postData)
     {
-        processData = new Dictionary<BattleCharacter, BattleOutputData>();
+        processData = new Dictionary<BattleCharacter, HpModifierData>();
         postData = new Dictionary<BattleCharacter, Dictionary<PostEffectType, int>>();
 
         foreach (BattleCharacterSlot slot in targets)
         {
             BattleCharacter target = slot.Character;
-            BattleOutputData data = new BattleOutputData();
+            HpModifierData data = new HpModifierData();
             data.value = Calculate(owner, target, skill);
-            data.type = BattleOutputData.Type.Damage;
+            data.type = HpModifierData.Type.Damage;
             processData.Add(target, data);
 
             //Add pose effect
@@ -412,7 +415,7 @@ public class BattleController : MonoBehaviour
     }
 }
 
-public class BattleOutputData
+public class HpModifierData
 {
     public enum Type { None, Damage, Heal }
     public Type type;

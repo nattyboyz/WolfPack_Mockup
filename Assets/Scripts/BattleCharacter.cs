@@ -16,14 +16,19 @@ public class BattleCharacter : MonoBehaviour
     [SerializeField] CharacterSpine characterSpine;
     [Header("UI")]
     [SerializeField] OverHeadUI overheadUI;
+    [SerializeField] UnitStatsUI unitStatUI;
 
 
     public CharacterData Data { get => characterData;}
     public OverHeadUI OverheadUI { get => overheadUI;}
     public Team Type { get => type; set => type = value; }
     public CharacterSpine CharacterSpine { get => characterSpine; set => characterSpine = value; }
+    public UnitStatsUI UnitStatUI { get => unitStatUI; set => unitStatUI = value; }
 
     //Event
+    public Action<HpModifierData> onModifyHp;
+    public Action<float> onModifyAp;
+    public Action<Dictionary<int, Gem>> onModifyGems;
     public Action<BattleCharacter> onDead;
     public Action onGiveUp;
 
@@ -81,30 +86,36 @@ public class BattleCharacter : MonoBehaviour
         }
     }
 
-    public IEnumerator ieTakeGemDamage(Dictionary<int,Gem> gemSlots)
+    public IEnumerator ieModifyGems(Dictionary<int,Gem> gemSlots)
     {
         foreach(KeyValuePair<int,Gem> kvp in gemSlots)
-        {
             Data.Battle.gems[kvp.Key] = kvp.Value;
-            //overheadUI.SetGem(kvp.Key, kvp.Value);
-        }
-        yield return overheadUI.DiamondUi.ieSetGems(gemSlots);
+
+        onModifyGems?.Invoke(gemSlots);
+
+        yield return unitStatUI.ieModifyGems(gemSlots);
+        yield return overheadUI.DiamondUi.ieModifyGems(gemSlots);
     }
 
-    public IEnumerator ieTakeDamage(BattleOutputData data)
+    public IEnumerator ieModifyHp(HpModifierData hpMod)
     {
-        ModifyHp(-data.value);
-        yield return overheadUI.ieModifyHp(-data.value);
+        float from = Data.Battle.hp;
+        float value = hpMod.value;
+        if (hpMod.type == HpModifierData.Type.Damage) value *= -1;
+        ModifyHp(value);
+
+        yield return overheadUI.ieModifyHp(value);
+        yield return unitStatUI.ieModifyHp(from, value);
+        if (characterData.Battle.isDead) onDead?.Invoke(this);
         //yield return new WaitForSeconds(0.2f);
     }
 
     void ModifyHp(float value)
-    {
+    {      
         if (characterData.Battle.hp + value <= 0)
         {
             characterData.Battle.hp = 0;
             characterData.Battle.isDead = true;
-            onDead?.Invoke(this);
         }
         else if (characterData.Battle.hp + value >= characterData.Battle.maxHp)
         {
@@ -118,6 +129,7 @@ public class BattleCharacter : MonoBehaviour
 
     void ModifyAp(float value)
     {
+        unitStatUI.ModifyAp(value);
         if (characterData.Battle.ap + value <= 0)
         {
             characterData.Battle.ap = 0;
