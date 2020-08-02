@@ -5,6 +5,7 @@ using System;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class ActionUIController : MonoBehaviour
 {
@@ -24,38 +25,122 @@ public class ActionUIController : MonoBehaviour
     [SerializeField] float x_distance = 80;
     [SerializeField] int visibleRange = 3;
 
+    [SerializeField]  MainControl input;
+
     Sequence menuMove;
 
+    private void Awake()
+    {
+        input = new MainControl();
+    }
+
+    private void OnEnable()
+    {
+        input.UI.Navigate.started += Navigate_started;
+        input.UI.Navigate.canceled += Navigate_canceled; ;
+        input.UI.Navigate.performed += Navigate_performed;
+        input.UI.Submit.performed += Submit_performed;
+        input.UI.Cancel.performed += Cancel_performed;
+
+        input.UI.Navigate.Enable();
+        input.UI.Submit.Enable();
+    }
+
+    private void Navigate_canceled(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Cancel");
+        navigationPress = false;
+    }
+
+    private void Navigate_started(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Start");
+        navigationPress = true;
+    }
+
+    private void OnDisable()
+    {
+        input.UI.Navigate.performed -= Navigate_performed;
+        input.UI.Submit.performed -= Submit_performed;
+        input.UI.Cancel.performed -= Cancel_performed;
+
+        input.UI.Navigate.Disable();
+        input.UI.Submit.Disable();
+    }
+
+    bool navigationPress = false;
     private void Update()
     {
         if (!isActive) return;
 
-        if (/*allowSelect &&*/ Input.GetKeyDown(KeyCode.A))
+        if (allowSelect && navigationPress && navigate.x<0)
         {
             TargetShift2(-1);
         }
-        else if (/*allowSelect && */Input.GetKeyDown(KeyCode.D))
+        else if (allowSelect && navigationPress && navigate.x > 0)
         {
             TargetShift2(1);
         }
-        else if (/*allowSelect &&*/ Input.GetKeyDown(KeyCode.Space))
-        {
-            //Debug.Log(buttons[selected_index].value);
-            onSubmit?.Invoke(buttons[selected_index].value);
-        }
-        else if (allowSelect && Input.GetKey(KeyCode.A))
-        {
-            TargetShift2(-1);
-        }
-        else if (allowSelect && Input.GetKey(KeyCode.D))
-        {
-            TargetShift2(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
-        {
-            onExit?.Invoke();
-        }
+        //input.uiInputModule.submit.action += () => { };
+
+        //if (/*allowSelect &&*/ Input.GetKeyDown(KeyCode.A))
+        //{
+        //    TargetShift2(-1);
+        //}
+        //else if (/*allowSelect && */Input.GetKeyDown(KeyCode.D))
+        //{
+        //    TargetShift2(1);
+        //}
+        //else if (/*allowSelect &&*/ Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    //Debug.Log(buttons[selected_index].value);
+        //    onSubmit?.Invoke(buttons[selected_index].value);
+        //}
+        //else if (allowSelect && Input.GetKey(KeyCode.A))
+        //{
+        //    TargetShift2(-1);
+        //}
+        //else if (allowSelect && Input.GetKey(KeyCode.D))
+        //{
+        //    TargetShift2(1);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
+        //{
+        //    onExit?.Invoke();
+        //}
     }
+
+    private void Submit_performed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Submit");
+        onSubmit?.Invoke(buttons[selected_index].value);
+        // throw new NotImplementedException();
+    }
+
+    private void Cancel_performed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Cancel");
+        onExit?.Invoke();
+    }
+
+
+    Vector2 navigate;
+    private void Navigate_performed(InputAction.CallbackContext obj)
+    { 
+        navigate = obj.ReadValue<Vector2>();
+        Debug.Log("Navigate " + navigate.x);
+        if (navigate.x > 0)
+        {
+            TargetShift2(1);
+        }
+        else
+        {
+            TargetShift2(-1);
+        }
+        //throw new NotImplementedException();
+    }
+
+
 
     private void Start()
     {
@@ -190,7 +275,7 @@ public class ActionUIController : MonoBehaviour
             }
             else
             {
-                menuMove.Join(buttons[i].transform.DOLocalMoveX(pos, 0.15f));
+                menuMove.Join(buttons[i].transform.DOLocalMoveX(pos, 0.2f));
                 if(i>half+ Mathf.FloorToInt(visibleRange*0.5f) || i < half - Mathf.FloorToInt(visibleRange * 0.5f))
                 {
                     menuMove.Join(buttons[i].image.DOFade(0,0.1f));
