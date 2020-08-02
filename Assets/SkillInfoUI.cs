@@ -34,8 +34,9 @@ public class SkillInfoUI : MonoBehaviour
         {
             if (animator != null && inClip != null)
             {
+                //animator.ResetTrigger("out");
                 animator.SetTrigger("in");
-                main_canvas.enabled = value;
+                //main_canvas.enabled = value;
                 yield return new WaitForSeconds(inClip.length);
             }
             else
@@ -47,9 +48,12 @@ public class SkillInfoUI : MonoBehaviour
         {
             if (animator != null && outClip != null)
             {
+                //animator.ResetTrigger("in");
+
                 animator.SetTrigger("out");
+
                 yield return new WaitForSeconds(outClip.length);
-                main_canvas.enabled = value;
+                //main_canvas.enabled = value;
             }
             else
             {
