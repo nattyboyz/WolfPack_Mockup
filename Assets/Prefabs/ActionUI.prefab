@@ -143,7 +143,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 1.25
+  m_padding: 0
   m_canvasRenderer: {fileID: 3527145591510922275}
   m_TextComponent: {fileID: 2316934451763060286}
   m_materialReferenceIndex: 1
@@ -412,7 +412,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2316750734517863628}
   allowSubmit: 1
-  value: Attack
+  value: Combat
   icon: {fileID: 1426813232882159375}
 --- !u!1 &2316750734653606949
 GameObject:

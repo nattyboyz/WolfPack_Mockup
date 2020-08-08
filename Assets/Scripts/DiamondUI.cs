@@ -75,8 +75,6 @@ public class DiamondUI : MonoBehaviour
     public IEnumerator ieSetGemsBreak(Dictionary<int, Gem> gemSlots)
     {
         yield return ieModifyGems(gemSlots);
-        //yield return
-        
     }
 
     //public static int GetEmptySlot(Gem[] gems)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.InputSystem;
 
 public enum TargetMode { Single, Team, All }
 public enum TargetFilter { None, Allies, Enemy, Any}
@@ -27,15 +28,93 @@ public class UnitSelection : MonoBehaviour
    // TargetMode mode;
     int selected_index = 0;
 
+    [SerializeField] protected MainControl input;
+    protected Vector2 navigate;
+
+    protected virtual void Awake()
+    {
+        input = new MainControl();
+    }
+
+    protected virtual void Start()
+    {
+
+    }
+
+    protected virtual void Enable()
+    {
+        input.UI.Navigate.started += Navigate_started;
+        input.UI.Navigate.canceled += Navigate_canceled;
+        input.UI.Navigate.performed += Navigate_performed;
+        input.UI.Submit.performed += Submit_performed;
+        input.UI.Cancel.performed += Cancel_performed;
+
+        input.UI.Navigate.Enable();
+        input.UI.Submit.Enable();
+        input.UI.Cancel.Enable();
+    }
+
+    protected virtual void Disable()
+    {
+        input.UI.Navigate.started -= Navigate_started;
+        input.UI.Navigate.canceled -= Navigate_canceled; ;
+        input.UI.Navigate.performed -= Navigate_performed;
+        input.UI.Submit.performed -= Submit_performed;
+        input.UI.Cancel.performed -= Cancel_performed;
+
+        input.UI.Navigate.Disable();
+        input.UI.Submit.Disable();
+        input.UI.Cancel.Disable();
+    }
+
+    protected virtual void Navigate_started(InputAction.CallbackContext obj)
+    {
+
+    }
+
+    protected virtual void Navigate_canceled(InputAction.CallbackContext obj)
+    {
+
+    }
+
+    protected virtual void Navigate_performed(InputAction.CallbackContext obj)
+    {
+        navigate = obj.ReadValue<Vector2>();
+        if (navigate.x > 0 || navigate.y < 0)
+        {
+            if (this.option.mode == TargetMode.Single) TargetShift(1);
+            else GroupShift(1);
+        }
+        else
+        {
+            if (this.option.mode == TargetMode.Single) TargetShift(-1);
+            else GroupShift(-1);
+        }
+    }
+
+    protected virtual void Submit_performed(InputAction.CallbackContext obj)
+    {
+        Disable();
+        Submit();
+    }
+
+    protected virtual void Cancel_performed(InputAction.CallbackContext obj)
+    {
+        Disable();
+        activeSelectTarget = false;
+        Deselect(selected_slots);
+        selected_slots.Clear();
+        onExit?.Invoke();
+    }
+
     public void Active(BattleCharacter owner, TargetOption option, int startValue)
     {
-        //Debug.Log("ActiveUnitSelection");
+        Enable();
         StartCoroutine(ieActive(owner, option, startValue));
     }
 
     IEnumerator ieActive(BattleCharacter owner, TargetOption option, int startValue)
     {
-        //Set default
         this.option = option;
         this.owner = owner;
         yield return new WaitForEndOfFrame();
@@ -51,6 +130,11 @@ public class UnitSelection : MonoBehaviour
         activeSelectTarget = true;
     }
 
+    public void Deactive()
+    {
+
+    }
+
     public void Submit()
     {
         Deselect(selected_slots);
@@ -60,40 +144,39 @@ public class UnitSelection : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (activeSelectTarget)
-        {
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-            {
-                if (this.option.mode == TargetMode.Single) TargetShift(-1);
-                else GroupShift(-1);
-            }
-            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-            {
+        //if (activeSelectTarget)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+        //    {
+        //        if (this.option.mode == TargetMode.Single) TargetShift(-1);
+        //        else GroupShift(-1);
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        //    {
 
-                if (this.option.mode == TargetMode.Single) TargetShift(1);
-                else GroupShift(1);
-            }
-            else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Submit();
-            }
-            else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
-            {
-                activeSelectTarget = false;
-                Deselect(selected_slots);
-                selected_slots.Clear();
-                //onExit?.Invoke();
-                StartCoroutine(ieExit());
-            }
-        }
+        //        if (this.option.mode == TargetMode.Single) TargetShift(1);
+        //        else GroupShift(1);
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Space))
+        //    {
+        //        Submit();
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
+        //    {
+        //        activeSelectTarget = false;
+        //        Deselect(selected_slots);
+        //        selected_slots.Clear();
+        //        StartCoroutine(ieExit());
+        //    }
+        //}
     }
 
-    public IEnumerator ieExit()
-    {
-        //yield return new WaitForSeconds(0.2f);
-        yield return new WaitForEndOfFrame();
-        onExit?.Invoke();
-    }
+    //public IEnumerator ieExit()
+    //{
+    //    //yield return new WaitForSeconds(0.2f);
+    //    yield return new WaitForEndOfFrame();
+    //    onExit?.Invoke();
+    //}
 
     //-1 +1
     public void TargetShift(int mod)
@@ -192,6 +275,7 @@ public class UnitSelection : MonoBehaviour
     /// </summary>
     public void SelectPrevious()
     {
+        Enable();
         foreach (BattleCharacterSlot slot in selected_slots)
         {
             if (slot.Character != null)
@@ -218,7 +302,6 @@ public class UnitSelection : MonoBehaviour
             }
         }
     }
-
 
     static bool IsMatch(BattleCharacter owner, BattleCharacter target, TargetOption option)
     {

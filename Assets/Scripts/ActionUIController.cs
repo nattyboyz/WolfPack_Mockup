@@ -25,7 +25,7 @@ public class ActionUIController : MonoBehaviour
     [SerializeField] float x_distance = 80;
     [SerializeField] int visibleRange = 3;
 
-    [SerializeField]  MainControl input;
+    [SerializeField] protected MainControl input;
 
     Sequence menuMove;
 
@@ -34,10 +34,10 @@ public class ActionUIController : MonoBehaviour
         input = new MainControl();
     }
 
-    private void OnEnable()
+    private void Enable()
     {
         input.UI.Navigate.started += Navigate_started;
-        input.UI.Navigate.canceled += Navigate_canceled; ;
+        input.UI.Navigate.canceled += Navigate_canceled;
         input.UI.Navigate.performed += Navigate_performed;
         input.UI.Submit.performed += Submit_performed;
         input.UI.Cancel.performed += Cancel_performed;
@@ -46,20 +46,10 @@ public class ActionUIController : MonoBehaviour
         input.UI.Submit.Enable();
     }
 
-    private void Navigate_canceled(InputAction.CallbackContext obj)
+    private void Disable()
     {
-        Debug.Log("Cancel");
-        navigationPress = false;
-    }
-
-    private void Navigate_started(InputAction.CallbackContext obj)
-    {
-        Debug.Log("Start");
-        navigationPress = true;
-    }
-
-    private void OnDisable()
-    {
+        input.UI.Navigate.started -= Navigate_started;
+        input.UI.Navigate.canceled -= Navigate_canceled; ;
         input.UI.Navigate.performed -= Navigate_performed;
         input.UI.Submit.performed -= Submit_performed;
         input.UI.Cancel.performed -= Cancel_performed;
@@ -67,6 +57,20 @@ public class ActionUIController : MonoBehaviour
         input.UI.Navigate.Disable();
         input.UI.Submit.Disable();
     }
+
+
+    private void Navigate_canceled(InputAction.CallbackContext obj)
+    {
+        //Debug.Log("Cancel");
+        navigationPress = false;
+    }
+
+    private void Navigate_started(InputAction.CallbackContext obj)
+    {
+        //Debug.Log("Start");
+        navigationPress = true;
+    }
+
 
     bool navigationPress = false;
     private void Update()
@@ -110,25 +114,25 @@ public class ActionUIController : MonoBehaviour
         //}
     }
 
+    Vector2 navigate;
+
     private void Submit_performed(InputAction.CallbackContext obj)
     {
-        Debug.Log("Submit");
+        //Debug.Log("Submit");
         onSubmit?.Invoke(buttons[selected_index].value);
         // throw new NotImplementedException();
     }
 
     private void Cancel_performed(InputAction.CallbackContext obj)
     {
-        Debug.Log("Cancel");
+        //Debug.Log("Cancel");
         onExit?.Invoke();
     }
 
-
-    Vector2 navigate;
     private void Navigate_performed(InputAction.CallbackContext obj)
     { 
         navigate = obj.ReadValue<Vector2>();
-        Debug.Log("Navigate " + navigate.x);
+        //Debug.Log("Navigate " + navigate.x);
         if (navigate.x > 0)
         {
             TargetShift2(1);
@@ -139,8 +143,6 @@ public class ActionUIController : MonoBehaviour
         }
         //throw new NotImplementedException();
     }
-
-
 
     private void Start()
     {
@@ -300,6 +302,14 @@ public class ActionUIController : MonoBehaviour
     {
         isActive = value;
         main_canvas.enabled = value;
+        if (value)
+        {
+            Enable();
+        }
+        else
+        {
+            Disable();
+        }
     }
 
     public void SetPosition(Vector3 pos)
@@ -311,6 +321,7 @@ public class ActionUIController : MonoBehaviour
     {
         main_canvas.enabled = false;
         Active(false);
+        //Disable();
     }
 
     #region Button function

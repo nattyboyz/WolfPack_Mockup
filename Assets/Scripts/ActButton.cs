@@ -128,9 +128,14 @@ public class ActButton : ListoButton
 
     public override void OnSubmit(BaseEventData eventData)
     {
+        Submit();
+        //Focus(false);
+    }
+
+    public override void Submit()
+    {
         if (!allowSubmit || !interactable) return;
         onClick?.Invoke(this);
-        //Focus(false);
     }
 
     public void EnoughActionPts(bool value)

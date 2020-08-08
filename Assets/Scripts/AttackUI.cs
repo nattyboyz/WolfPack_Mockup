@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class AttackUI : ListoUI
 {
@@ -12,6 +13,7 @@ public class AttackUI : ListoUI
     [SerializeField] BattleCharacter owner;
     [SerializeField] BattleController battleCtrl;
     [SerializeField] SkillInfoUI skillInfo;
+
 
     protected override void Start()
     {
@@ -100,8 +102,6 @@ public class AttackUI : ListoUI
 
     public override void Active(bool active)
     {
-        base.Active(active);
-
         if (active)
         {
             Select(owner.Data.Battle.ui_lastAttack);
@@ -123,6 +123,9 @@ public class AttackUI : ListoUI
             }
             page = 0;
         }
+
+        base.Active(active);
+
         main_canvas.enabled = active;
     }
 

@@ -133,7 +133,7 @@ public class BattleController : MonoBehaviour
     {
         actionUI.onSubmit = (code) =>
         {
-            if (code == "Attack")
+            if (code == "Combat")
             {
                 attackUI.Init(character, this);
                 attackUI.Active(true);

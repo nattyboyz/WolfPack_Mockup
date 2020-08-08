@@ -24,6 +24,11 @@ public class ListoButton : Selectable, IPointerEnterHandler,
 
     public virtual void OnSubmit(BaseEventData eventData) { }
 
+    public virtual void Submit()
+    {
+        onClick?.Invoke(this);
+    }
+
     public virtual void Hide()
     {
         interactable = false;
@@ -37,3 +42,5 @@ public class ListoButton : Selectable, IPointerEnterHandler,
 
     }
 }
+
+

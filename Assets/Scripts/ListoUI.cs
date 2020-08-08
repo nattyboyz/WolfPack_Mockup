@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.InputSystem;
 
 public class ListoUI : MonoBehaviour
 {
@@ -19,43 +20,128 @@ public class ListoUI : MonoBehaviour
     [SerializeField] protected List<ListoButton> buttons = new List<ListoButton>();
     [SerializeField] List<string> stringList;
 
+    public Action<string> onSubmit;
     public Action onExit;
-   
+
+    [SerializeField] protected MainControl input;
+    protected Vector2 navigate;
+
+    protected virtual void Awake()
+    {
+        input = new MainControl();
+    }
+
     protected virtual void Start()
     {
 
     }
 
-    public virtual void Active(bool active)
+    protected virtual void Enable()
     {
-        isActive = active;
+        input.UI.Navigate.started += Navigate_started;
+        input.UI.Navigate.canceled += Navigate_canceled;
+        input.UI.Navigate.performed += Navigate_performed;
+        input.UI.Submit.performed += Submit_performed;
+        input.UI.Cancel.performed += Cancel_performed;
+
+        input.UI.Navigate.Enable();
+        input.UI.Submit.Enable();
+        input.UI.Cancel.Enable();
     }
 
-    public virtual void LateUpdate()
+    protected virtual void Disable()
     {
-        if (!isActive) return;
+        input.UI.Navigate.started -= Navigate_started;
+        input.UI.Navigate.canceled -= Navigate_canceled; ;
+        input.UI.Navigate.performed -= Navigate_performed;
+        input.UI.Submit.performed -= Submit_performed;
+        input.UI.Cancel.performed -= Cancel_performed;
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            TargetShift(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
+        input.UI.Navigate.Disable();
+        input.UI.Submit.Disable();
+        input.UI.Cancel.Disable();
+    } 
+
+    protected virtual void Navigate_started(InputAction.CallbackContext obj)
+    {
+        //Debug.Log("Start");
+        //navigationPress = true;
+    }
+
+    protected virtual void Navigate_canceled(InputAction.CallbackContext obj)
+    {
+        //Debug.Log("Cancel");
+        //navigationPress = false;
+    }
+
+    protected virtual void Navigate_performed(InputAction.CallbackContext obj)
+    {
+        navigate = obj.ReadValue<Vector2>();
+        //Debug.Log("Navigate " + navigate.x);
+        if (navigate.x > 0 || navigate.y < 0)
         {
             TargetShift(1);
         }
-        else if (Input.GetKeyDown(KeyCode.A))
+        else
         {
-            PageShift(-1);
+            TargetShift(-1);
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        //throw new NotImplementedException();
+    }
+
+    protected virtual void Submit_performed(InputAction.CallbackContext obj)
+    {
+        //Debug.Log("Submit");
+        onSubmit?.Invoke(buttons[selected_index].value);
+        buttons[selected_index].Submit();
+        // throw new NotImplementedException();
+    }
+
+    protected virtual void Cancel_performed(InputAction.CallbackContext obj)
+    {
+        //Debug.Log("Cancel");
+        onExit?.Invoke();
+    }
+
+
+    public virtual void Active(bool active)
+    {
+        isActive = active;
+        if (active)
         {
-            PageShift(1);
+            Enable();
         }
-        else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
+        else
         {
-            StartCoroutine(ieExit());
+            Disable();
         }
     }
+
+    //public virtual void LateUpdate()
+    //{
+    //    if (!isActive) return;
+
+    //    if (Input.GetKeyDown(KeyCode.W))
+    //    {
+    //        TargetShift(-1);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.S))
+    //    {
+    //        TargetShift(1);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        PageShift(-1);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.D))
+    //    {
+    //        PageShift(1);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Escape) || (Input.GetMouseButtonDown(1)))
+    //    {
+    //        StartCoroutine(ieExit());
+    //    }
+    //}
 
     protected virtual IEnumerator ieExit()
     { 

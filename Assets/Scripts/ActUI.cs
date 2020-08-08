@@ -84,7 +84,6 @@ public class ActUI : ListoUI
                     unitSelection.onExit = () =>
                     {
                         skillInfo.Active(false);
-                        //battleCtrl.invokeUI.Active(false);
                         Active(true);
                     };
                     unitSelection.onSubmit = (slots) =>
