@@ -9,24 +9,28 @@ public class UnitStatsUI : MonoBehaviour
 {
     [SerializeField] HpUI hpUi;
     [SerializeField] SpUI spUi;
+    [SerializeField] StripeBarUI apUi;
+
     [SerializeField] DiamondUI diamondUI;
     [SerializeField] TextMeshProUGUI name_txt;
     [SerializeField] TextMeshProUGUI hp_txt;
+    [SerializeField] TextMeshProUGUI max_hp_txt;
     [SerializeField] TextMeshProUGUI ap_txt;
     [SerializeField] Image portrait_img;
     [SerializeField] Image fraction_flag_img;
     Tweener hpTween;
     
-
     CharacterData data;
 
     void SetData(CharacterData data)
     {
         this.data = data;
         hpUi.Init(0, data.Battle.maxHp, data.Battle.hp);
-        spUi.Init(0, data.Battle.maxAp, data.Battle.ap);
+        //spUi.Init(0, data.Battle.maxAp, data.Battle.ap);
+        apUi.Init(0, data.Battle.maxAp, data.Battle.ap);
 
-        hp_txt.text = data.Battle.hp.ToString() + "/" + data.Battle.maxHp.ToString();
+        hp_txt.text = data.Battle.hp.ToString();
+        max_hp_txt.text = data.Battle.maxHp.ToString();
         ap_txt.text = data.Battle.ap.ToString() + "/" + data.Battle.maxAp.ToString();
 
         name_txt.text = data.Base.C_name;
@@ -53,13 +57,15 @@ public class UnitStatsUI : MonoBehaviour
     public void SetHp(float hp)
     {
         hpUi.Init(0, data.Battle.maxHp, data.Battle.hp);
-        hp_txt.text = data.Battle.hp.ToString() + "/" + data.Battle.maxHp.ToString();
+        hp_txt.text = data.Battle.hp.ToString();
+        max_hp_txt.text = data.Battle.maxHp.ToString();
     }
 
     public void SetSp(float sp)
     {
         spUi.Init(0, data.Battle.maxAp, data.Battle.ap);
-        ap_txt.text = data.Battle.ap.ToString() + "/" + data.Battle.maxAp.ToString();
+        hp_txt.text = data.Battle.hp.ToString();
+        max_hp_txt.text = data.Battle.maxHp.ToString();
     }
 
     public IEnumerator ieModifyGems(Dictionary<int, Gem> gemSlots)

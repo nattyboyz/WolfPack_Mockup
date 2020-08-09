@@ -136,7 +136,7 @@ public class DiamondPreview : MonoBehaviour
             deactivateEvent.Invoke();
             Disable();
         }
-        glowBack.gameObject.SetActive(value);
+       // glowBack.gameObject.SetActive(value);
         handleLeft.gameObject.SetActive(value);
         handleRight.gameObject.SetActive(value);
     }

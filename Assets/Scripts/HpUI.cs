@@ -11,6 +11,7 @@ public class HpUI : FillUI
     Sequence t;
     public Sequence HpTween { get => t; }
     [SerializeField] TextMeshProUGUI hp_txt;
+    [SerializeField] TextMeshProUGUI max_hp_txt;
     public float ModifyDuration { get => modifyDuration; set => modifyDuration = value; }
 
     //float modifyFreeze = 0.1f;
@@ -45,7 +46,10 @@ public class HpUI : FillUI
             t.Join(DOTween.To(() => temp,
             x => temp = x,
            (int)target, ModifyDuration));
-            t.OnUpdate(()=> { hp_txt.text = temp.ToString();  });
+            t.OnUpdate(()=> {
+                hp_txt.text = temp.ToString();
+                max_hp_txt.text = _default.max.ToString();
+            });
         }
 
         t.Restart();

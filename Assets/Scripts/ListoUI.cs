@@ -78,13 +78,23 @@ public class ListoUI : MonoBehaviour
     {
         navigate = obj.ReadValue<Vector2>();
         //Debug.Log("Navigate " + navigate.x);
-        if (navigate.x > 0 || navigate.y < 0)
+        if (navigate.y < 0)
         {
             TargetShift(1);
         }
-        else
+        else if(navigate.y > 0)
         {
             TargetShift(-1);
+        }
+
+
+        if (navigate.x > 0)
+        {
+            PageShift(1);
+        }
+        else if (navigate.x < 0)
+        {
+            PageShift(-1);
         }
         //throw new NotImplementedException();
     }

@@ -137,7 +137,7 @@ public class ActionUIController : MonoBehaviour
         {
             TargetShift2(1);
         }
-        else
+        else if(navigate.x < 0)
         {
             TargetShift2(-1);
         }
